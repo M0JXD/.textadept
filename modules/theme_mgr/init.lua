@@ -97,6 +97,7 @@ function M.theme_view(view_reset, view)
 		theme = UI == 'terminal' and M.theme.term or (_THEME == 'dark') and M.theme.dark or
 			M.theme.light
 	end
+	-- TODO: When splitting this fails saying set_theme is a nil value, but only on Windows??
 	view:set_theme(theme, {font = M.font.family, size = M.font.size})
 end
 
