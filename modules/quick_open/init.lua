@@ -50,7 +50,7 @@ M.git_client = 'lazygit'
 if OS == 'windows' then
 	M.terminal = 'cmd.exe /f:on'
 	M.explorer = 'explorer.exe'
-	M.git_client = 'lazygit.exe'
+	M.git_client = M.git_client .. '.exe'
 end
 
 function M.openTerminalHere(arg)
