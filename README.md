@@ -12,17 +12,17 @@ They're mainly here so I can grab them wherever I need them, but anyone is welco
 
 All of the modules I've made have their own README that explains them. In short, there is:
 
-| Module Name                 | Description |
-| :-------------------------- | :---------- |
-| Theme Manager               | Helps setting up switched themes and detects missing features (e.g. fonts) to gracefully fallback to defaults |
-| Document Statistics         | Gives details about the buffer such as word count, selected lines etc. |
-| Distraction Free            | Updated version of Distraction Free mode taking advantage of of Textadept 13 statusbar hiding and additional terminal version support |
-| Quick Open                  | Based on "Open Terminal Here", but also allows opening File Browser and TUI Git Clients, working on Windows and various DEs |
-| Export Extensions           | Extends the official export module with options to convert Markdown and LaTeX to PDF and HTML |
-| Buffer Statusbar Utilities  | String manipulation utilities to make adjusting the Buffer Statusbar easier |
-| File Browser (UNMAINTAINED) | A modified version of the Textadept File Browser |
+| Module Name                 | Description                                                                                          |
+| :-------------------------- | :--------------------------------------------------------------------------------------------------- |
+| Theme Manager               | Sets up switched themes and detects missing features (e.g. fonts) to gracefully fallback to defaults |
+| Document Statistics         | Gives details about the buffer such as word count, selected lines etc.                               |
+| Distraction Free            | Updated Distraction Free mode supporting the terminal and taking advantage of new Textadept features |
+| Quick Open                  | Based on "Open Terminal Here", but also allows opening File Browser and TUI Git Clients              |
+| Export Extensions           | Extends the official export module with options to convert Markdown and LaTeX to PDF and HTML        |
+| Buffer Statusbar Utilities  | String manipulation utilities to make adjusting the Buffer Statusbar easier                          |
 
 I usually install Textadept to *~/Applications/textadept/*, I always forget my desktop integration steps so:
+
 - Copy desktop files to *~.local/share/applications/* and SVG icons in *~/.local/share/icons/hicolor/scalable/apps/*.
 - Add this into *.bashrc* or *.bash_profile* (aliases possibly in *.bash_aliases*):
 
