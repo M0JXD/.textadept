@@ -1,9 +1,9 @@
 -- Copyright 2025 Jamie Drinkell. MIT License.
 -- Quick open module to open a terminal, file explorer etc. at the current file path
+-- Only for GUI version.
 
 local M = {}
 
--- TODO: If UI == 'terminal', can I suspend and launch in current terminal?
 if UI == 'terminal' then return M end
 
 local desktop = os.getenv('XDG_CURRENT_DESKTOP')
