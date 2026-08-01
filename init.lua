@@ -58,7 +58,6 @@ if OS ~= 'bsd' then require('discord_rpc')() end
 
 -- Modules (External)
 -- theme_mgr() ; require('textredux').hijack() -- @rgieseke
--- keys['ctrl+@'] = require('minimap') -- @Fwirt
 
 -- Buffer/Language Settings
 lexer.detect_extensions.h = 'c'
