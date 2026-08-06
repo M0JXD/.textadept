@@ -60,23 +60,23 @@ if OS ~= 'bsd' then require('discord_rpc')() end
 -- theme_mgr() ; require('textredux').hijack() -- @rgieseke
 
 -- Buffer/Language Settings
-lexer.detect_extensions.h = 'c'
-lexer.detect_extensions.C = 'cpp'
-lexer.detect_extensions.njk = 'html'
-lexer.detect_extensions['direwolf.conf'] = 'bash'
-lexer.detect_extensions.blp = 'blueprint'
 lexer.detect_extensions.adoc = 'asciidoc'
+lexer.detect_extensions.blp = 'blueprint'
+lexer.detect_extensions.C = 'cpp'
+lexer.detect_extensions['direwolf.conf'] = 'bash'
+lexer.detect_extensions.h = 'c'
+lexer.detect_extensions.njk = 'html'
 textadept.editing.auto_pairs.text = {}
 textadept.editing.auto_pairs.markdown = {['*'] = '*', ['_'] = '_'}
 -- TODO: Propose a setting so comments without trailing whitespace can be detected
-textadept.editing.comment_string.c = '/* | */'
-textadept.editing.comment_string.lua = '-- '
-textadept.editing.comment_string.python = '# '
 textadept.editing.comment_string.bash = '# '
+textadept.editing.comment_string.c = '/* | */'
 textadept.editing.comment_string.cpp = '// '
 textadept.editing.comment_string.dart = '// '
 textadept.editing.comment_string.java = '// '
 textadept.editing.comment_string.javascript = '// '
+textadept.editing.comment_string.lua = '-- '
+textadept.editing.comment_string.python = '# '
 textadept.editing.highlight_words = textadept.editing.HIGHLIGHT_SELECTED
 textadept.run.run_in_background = true
 ui.find.highlight_all_matches = true
