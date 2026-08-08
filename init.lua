@@ -194,7 +194,6 @@ keys[(UI == 'terminal' and 'meta+down' or 'alt+down')] = buffer.move_selected_li
 -- Hide some folders from the quick open list
 table.insert(lfs.default_filter, '!assets')
 table.insert(lfs.default_filter, '!build')
-table.insert(lfs.default_filter, '!build_dir')
 table.insert(lfs.default_filter, '!resources')
 table.insert(lfs.default_filter, '!.vs')
 table.insert(lfs.default_filter, '!.vscode')
