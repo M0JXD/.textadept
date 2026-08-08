@@ -68,15 +68,11 @@ lexer.detect_extensions.h = 'c'
 lexer.detect_extensions.njk = 'html'
 textadept.editing.auto_pairs.text = {}
 textadept.editing.auto_pairs.markdown = {['*'] = '*', ['_'] = '_'}
--- TODO: Propose a setting so comments without trailing whitespace can be detected
-textadept.editing.comment_string.bash = '# '
+events.connect(events.LEXER_LOADED, function(name)
+	local prop = 'scintillua.comment.' .. name
+	buffer.property[prop] = buffer.property[prop] .. ' ' -- extra trailing space
+end)
 textadept.editing.comment_string.c = '/* | */'
-textadept.editing.comment_string.cpp = '// '
-textadept.editing.comment_string.dart = '// '
-textadept.editing.comment_string.java = '// '
-textadept.editing.comment_string.javascript = '// '
-textadept.editing.comment_string.lua = '-- '
-textadept.editing.comment_string.python = '# '
 textadept.editing.highlight_words = textadept.editing.HIGHLIGHT_SELECTED
 textadept.run.run_in_background = true
 ui.find.highlight_all_matches = true
