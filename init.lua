@@ -188,7 +188,7 @@ keys['f2'] = menubar['File/Rename'][2]
 keys['f5'] = reset
 if UI == 'terminal' then
 	keys['meta+L'] = textadept.editing.select_line
-	keys['ctrl+ '] = function() textadept.editing.autocomplete('word') end
+	keys['ctrl+ '] = menubar['Edit/Complete Word'][2]
 end
 keys[(UI == 'terminal' and 'ctrl+k' or 'ctrl+K')] = buffer.line_delete
 keys[(UI == 'terminal' and 'meta+,' or 'ctrl+,')] = menubar['Edit/Preferences'][2]
