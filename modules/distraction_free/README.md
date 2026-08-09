@@ -1,6 +1,7 @@
 # Textadept Distraction Free Mode
 
 Textadept Distraction Free Mode
+
 Based on Mitchell's [Distraction Free Mode][1], but wrapped into a module.
 
 It can hide more UI elements and allows you to configure what you want to hide.

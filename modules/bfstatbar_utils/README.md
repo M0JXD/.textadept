@@ -1,6 +1,7 @@
 # Buffer Statusbar Text Manipulation Utilities
 
 Buffer Statusbar Text Manipulation Utilities
+
 Buffer Statusbar Utilities is the very short awaited replacement for both bfstatbar_helper that
 was [removed][1] and the [table idea introduced in Textadept's Discussions][2].
 

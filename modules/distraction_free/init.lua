@@ -1,6 +1,7 @@
 -- Copyright 2020 Mitchell. Copyright 2025-2026 Jamie Drinkell. See LICENSE.
 
 --- Textadept Distraction Free Mode
+--
 -- Based on Mitchell's [Distraction Free Mode][1], but wrapped into a module.
 -- It can hide more UI elements and allows you to configure what you want to hide.
 -- Also works in the terminal version. Defaults to my preferences.

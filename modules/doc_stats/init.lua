@@ -1,6 +1,7 @@
 -- Copyright 2025-2026 Jamie Drinkell. MIT License.
 
 --- Textadept Document Statistics
+--
 -- Simple document statistics module, providing additional details about the buffer and selections.
 -- Document Statistics is inspired by the plugin of the same name in the Xed editor, and the
 -- Summary feature in Notepad++. It adds a "Tools > Document Statistics" menu entry which opens a
