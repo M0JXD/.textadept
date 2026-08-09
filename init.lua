@@ -7,8 +7,6 @@ theme_mgr.theme.dark = 'ayu-dark'
 theme_mgr.theme.term = 'ayu-evolve'
 theme_mgr.theme.markdown = {'catppuccin-latte', 'ayu-dark'}
 if OS ~= 'windows' then theme_mgr.theme.text = {'xed-light', 'xed-dark'} end
--- theme_mgr.font.family = 'Droid Sans Mono'
--- theme_mgr.font.family = 'Noto Mono'
 -- theme_mgr.font.family = 'FreeMono'
 
 -- Modules (Official)
