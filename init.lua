@@ -186,6 +186,10 @@ end)
 local menubar = textadept.menu.menubar
 keys['f2'] = menubar['File/Rename'][2]
 keys['f5'] = reset
+if UI == 'terminal' then
+	keys['meta+L'] = textadept.editing.select_line
+	keys['ctrl+ '] = function() textadept.editing.autocomplete('word') end
+end
 keys[(UI == 'terminal' and 'ctrl+k' or 'ctrl+K')] = buffer.line_delete
 keys[(UI == 'terminal' and 'meta+,' or 'ctrl+,')] = menubar['Edit/Preferences'][2]
 keys[(UI == 'terminal' and 'meta+up' or 'alt+up')] = buffer.move_selected_lines_up
