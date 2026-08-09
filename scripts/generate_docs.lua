@@ -60,6 +60,15 @@ for _, dir_name in ipairs(dirs) do
 		local dir = '../modules/' .. dir_name
 		print('Generating documentation for ' .. dir_name .. '...')
 		os.execute(gen_ldoc_command(dir, get_module_title(dir .. '/init.lua')))
+
+		-- Remove trailing whitespace
+		local file = io.open(dir .. '/init.lua')
+		local txt = file:read('*all')
+		file:close()
+		txt = txt:gsub("^%s*(.-)%s*$", "%1") .. '\n'
+		file = io.open(dir .. '/init.lua', 'w')
+		file:write(txt)
+		file:close()
 	end
 end
 

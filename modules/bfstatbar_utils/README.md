@@ -5,7 +5,7 @@ Buffer Statusbar Utilties is the very short awaited replacement for both bfstatb
 was [removed][1] and the [table idea introduced in Textadept's Discussions][2].
 
 
-It introduces some additional string functions to manage the buffer statusbar more easily.
+It introduces some additional string functions to manage the buffer_statusbar more easily.
 
 Example usage:
 
@@ -73,3 +73,6 @@ Parameters:
 - *value*:  String to be used as replacement.
 
 Returns: Buffer statusbar string with value at pos replaced.
+
+
+
