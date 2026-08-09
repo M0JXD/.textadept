@@ -1,7 +1,7 @@
 -- Copyright 2026 Jamie Drinkell. See LICENSE.
 
 --- Generate documentation READMEs for submodules using LDoc.
--- Run this in any lua interpreter with LFS available.
+-- Run this in a lua interpreter with LFS available.
 -- @usage `textadept -L generate_docs.lua`
 
 local lfs = require('lfs')
@@ -62,11 +62,11 @@ for _, dir_name in ipairs(dirs) do
 		os.execute(gen_ldoc_command(dir, get_module_title(dir .. '/init.lua')))
 
 		-- Remove trailing whitespace
-		local file = io.open(dir .. '/init.lua')
+		local file = io.open(dir .. '/README.md')
 		local txt = file:read('*all')
-		file:close()
 		txt = txt:gsub("^%s*(.-)%s*$", "%1") .. '\n'
-		file = io.open(dir .. '/init.lua', 'w')
+		file:close()
+		file = io.open(dir .. '/README.md', 'w')
 		file:write(txt)
 		file:close()
 	end
