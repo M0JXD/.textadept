@@ -50,8 +50,8 @@ require('bfstatbar_utils')
 require('distraction_free')
 require('quick_open')
 require('export_ext')
-local ds = require('doc_stats')
-ds.display.lines = true
+local doc_stats = require('doc_stats')
+doc_stats.display.lines = true
 if OS ~= 'bsd' then require('discord_rpc')() end
 
 -- Modules (External)
@@ -81,8 +81,8 @@ local function lexer_settings()
 	view.wrap_mode = view.WRAP_NONE
 	textadept.editing.strip_trailing_spaces = true
 	if format then format.on_save = false end
-	ds.display.chars = false
-	ds.display.words = false
+	doc_stats.display.chars = false
+	doc_stats.display.words = false
 
 	local name = buffer:get_lexer()
 	if name == 'makefile' or name == 'lua' then
@@ -93,8 +93,8 @@ local function lexer_settings()
 	elseif name == 'text' or name == 'markdown' then
 		view.wrap_mode = view.WRAP_WHITESPACE
 		textadept.editing.strip_trailing_spaces = false
-		ds.display.chars = 3
-		ds.display.words = 3
+		doc_stats.display.chars = 3
+		doc_stats.display.words = 3
 	end
 end
 events.connect(events.LEXER_LOADED, lexer_settings)
