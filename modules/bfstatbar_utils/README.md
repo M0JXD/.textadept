@@ -1,7 +1,7 @@
-# Buffer Statusbar Text Manipulation Utilites
+# Buffer Statusbar Text Manipulation Utilities
 
-Buffer Statusbar Text Manipulation Utilites
-Buffer Statusbar Utilties is the very short awaited replacement for both bfstatbar_helper that
+Buffer Statusbar Text Manipulation Utilities
+Buffer Statusbar Utilities is the very short awaited replacement for both bfstatbar_helper that
 was [removed][1] and the [table idea introduced in Textadept's Discussions][2].
 
 
@@ -37,7 +37,7 @@ Counts the entries in the buffer statusbar.
 Parameters:
 - *str*:  Buffer statusbar string to count entries of.
 
-Returns: amount of entries in the buffer statusbar.
+Returns: Amount of entries in the buffer statusbar.
 
 <a id="string.bst_insert"></a>
 ## `string.bst_insert`(*str*[, *pos*], *value*)

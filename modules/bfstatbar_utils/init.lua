@@ -1,7 +1,7 @@
 -- Copyright 2026 Jamie Drinkell. MIT License.
 
---- Buffer Statusbar Text Manipulation Utilites
--- Buffer Statusbar Utilties is the very short awaited replacement for both bfstatbar_helper that
+--- Buffer Statusbar Text Manipulation Utilities
+-- Buffer Statusbar Utilities is the very short awaited replacement for both bfstatbar_helper that
 -- was [removed][1] and the [table idea introduced in Textadept's Discussions][2].
 --
 -- It introduces some additional string functions to manage the buffer_statusbar more easily.
@@ -34,7 +34,7 @@ local spacing = UI == 'terminal' and '  ' or '    '
 
 --- Counts the entries in the buffer statusbar.
 -- @param str Buffer statusbar string to count entries of.
--- @return amount of entries in the buffer statusbar.
+-- @return Amount of entries in the buffer statusbar.
 function string.bst_count(str)
 	local _, count = str:gsub(spacing, spacing)
 	return count + 1
