@@ -10,7 +10,8 @@ They're mainly here so I can grab them wherever I need them, but anyone is welco
     - Catppuccin Latte, Frappé, Macchiato and Mocha.
     - Xed Light and Dark to match Linux Mint's default editor.
 
-All of the modules I've made have their own README that explains them. In short, there is:
+All of the modules I've made are have LDoc documentation that works with Textadept's LSP
+and is used to generate the README's. There is:
 
 | Module Name                 | Description                                                                                          |
 | :-------------------------- | :--------------------------------------------------------------------------------------------------- |
