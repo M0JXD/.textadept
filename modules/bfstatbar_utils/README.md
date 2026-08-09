@@ -73,6 +73,3 @@ Parameters:
 - *value*:  String to be used as replacement.
 
 Returns: Buffer statusbar string with value at pos replaced.
-
-
-
