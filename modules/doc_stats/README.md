@@ -1,28 +1,132 @@
-## Document Statistics Module
+# Textadept Document Statistics
 
-Document Statistics is inspired by the plugin of the same name in the Xed editor and the Summary feature in Notepad++.
-It will add a menu under *Tools* which will show a dialog with statistics for the current selection and the whole document.
+Textadept Document Statistics
+Simple document statistics module, providing additional details about the buffer and selections.
 
-You can also optionally add these details in the buffer status bar with the `doc_stats.display` table.
-Set each field as true to use the default placement or use a number to insert it to a position of your choice.
+Document Statistics is inspired by the plugin of the same name in the Xed editor, and the
+Summary feature in Notepad++. It adds a "Tools > Document Statistics" menu entry which opens a
+dialog with details for the current selection and the whole document.
 
-Note the field called `doc_stats.display.lines` will replace Textadept's line counter so that it shows the amount of lines when a selection exists, but is otherwise the same when there is no selection.
+You can also add these details in the buffer status bar with the [`doc_stats.display`](#doc_stats.display) table.
+Set each field as true to use the default placement, or use a number to insert at that position.
 
-The internal utilities functions are exposed, e.g. you may call `doc_stats.count_words(false)` to get the words for the current selection (true would get the whole document). They work on the currently active buffer.
+NB: The field `doc_stats.display.lines` will replace Textadept's line counter so that it shows
+the amount of lines instead of the line the cursor is on when a selection exists.
 
-The word count feature is based on https://www.countofwords.com/word-count-algorithms-and-how-you-can-use-them.html
-The separators are configurable in the `doc_stats.separators` array. By default, it only matches whitespace, which provides the same results as MS Office.
+The internal count functions are exposed, they work on the currently active buffer.
 
-Example usage:
+The word count uses the algorithm from
+<https://www.countofwords.com/word-count-algorithms-and-how-you-can-use-them.html>
+
+The separators are configurable in the [`doc_stats.separators`](#doc_stats.separators) array.
+By default, it only matches whitespace, which provides the same results as MS Office.
+
+
+<a id="doc_stats.ALL_SPACES"></a>
+## `doc_stats.ALL_SPACES`
+
+Constant for [`doc_stats.count_chars`](#doc_stats.count_chars) to include spaces in the count.
+
+<a id="doc_stats.DISCARD_NEWLINES"></a>
+## `doc_stats.DISCARD_NEWLINES`
+
+Constant for [`doc_stats.count_chars`](#doc_stats.count_chars) to discard newlines in the count.
+
+<a id="doc_stats.DISCARD_SPACES"></a>
+## `doc_stats.DISCARD_SPACES`
+
+Constant for [`doc_stats.count_chars`](#doc_stats.count_chars) to discard spaces in the count.
+
+<a id="doc_stats.count_bytes"></a>
+## `doc_stats.count_bytes`(*all*)
+
+Count the amount of bytes.
+
+Parameters:
+- *all*:  Boolean to signify whether to count current selection or "all" of the document.
+
+Returns: Amount of bytes counted.
+
+<a id="doc_stats.count_chars"></a>
+## `doc_stats.count_chars`(*spaces*, *all*)
+
+Count the amount of characters.
+
+Parameters:
+- *spaces*:  Constant value to signify what whitespace should(n't) be included in the count.
+- *all*:  Boolean to signify whether to count current selection or "all" of the document.
+
+Returns: Amount of chars counted.
+
+Usage:
 
 ```lua
-doc_stats = require('doc_stats')
-doc_stats.display.menu = false
-doc_stats.display.lines = true
-doc_stats.display.words = true
-doc_stats.display.bytes = true
-doc_stats.display.chars = 5
-doc_stats.display.chars_ns = 1
+local all_chars = doc_stats.count_chars(doc_stats.ALL_SPACES, true)
+```
 
-local all_spaces = doc_stats.count_spaces(true)
+<a id="doc_stats.count_newline"></a>
+## `doc_stats.count_newline`(*all*)
+
+Count the amount of newlines.
+
+Parameters:
+- *all*:  Boolean to signify whether to count current selection or "all" of the document.
+
+Returns: Amount of newlines counted.
+
+<a id="doc_stats.count_rows"></a>
+## `doc_stats.count_rows`()
+
+Count the amount of rows for the current selection.
+
+Returns: Amount of rows counted.
+
+<a id="doc_stats.count_spaces"></a>
+## `doc_stats.count_spaces`(*all*)
+
+Count the amount of spaces.
+
+Parameters:
+- *all*:  Boolean to signify whether to count current selection or "all" of the document.
+
+Returns: Amount of spaces counted.
+
+<a id="doc_stats.count_words"></a>
+## `doc_stats.count_words`(*all*)
+
+Count the amount of words.
+
+Parameters:
+- *all*:  Boolean to signify whether to count current selection or "all" of the document.
+
+Returns: Amount of words counted.
+
+<a id="doc_stats.display"></a>
+## `doc_stats.display`
+
+What to display in the buffer statusbar.
+
+All values are `false` by default.
+Set `true` for the default placement, or a number for a specific location.
+
+Fields:
+- `words`: Display word counts.
+- `bytes`: Display byte counts.
+- `lines`: Replace line counter with one that uses the selection.
+- `rows`: Display row counts.
+- `chars`: Display char counts.
+- `chars_ns`: Display char (exc. spaces) counts.
+- `chars_nl`: Display char (exc. newlines) counts.
+
+<a id="doc_stats.separators"></a>
+## `doc_stats.separators`
+
+Separators for the Word Count Algorithm.
+
+Default entries are whitespace characters `'\t'`, `'\n'`, `'\r'` and `' '`.
+
+Usage:
+
+```lua
+doc_stats.separators[#doc_stats.separators+1] = '-' -- Add '-' to separators
 ```

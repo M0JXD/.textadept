@@ -1,43 +1,59 @@
 -- Copyright 2025-2026 Jamie Drinkell. MIT License.
--- Simple document statistics module, providing additional details about the buffer and selections.
 
+--- Textadept Document Statistics
+-- Simple document statistics module, providing additional details about the buffer and selections.
+-- Document Statistics is inspired by the plugin of the same name in the Xed editor, and the
+-- Summary feature in Notepad++. It adds a "Tools > Document Statistics" menu entry which opens a
+-- dialog with details for the current selection and the whole document.
+--
+-- You can also add these details in the buffer status bar with the `doc_stats.display` table.
+-- Set each field as true to use the default placement, or use a number to insert at that position.
+--
+-- NB: The field `doc_stats.display.lines` will replace Textadept's line counter so that it shows
+-- the amount of lines instead of the line the cursor is on when a selection exists.
+--
+-- The internal count functions are exposed, they work on the currently active buffer.
+--
+-- The word count uses the algorithm from
+-- <https://www.countofwords.com/word-count-algorithms-and-how-you-can-use-them.html>
+--
+-- The separators are configurable in the `doc_stats.separators` array.
+-- By default, it only matches whitespace, which provides the same results as MS Office.
+--
+-- @module doc_stats
 local M = {}
 
+--- What to display in the buffer statusbar.
+-- All values are `false` by default.
+-- Set `true` for the default placement, or a number for a specific location.
 M.display = {
-	menu = true, words = false, bytes = false, lines = false, rows = false, chars = false,
-	chars_ns = false, chars_nl = false
+	words = false, -- Display word counts.
+	bytes = false, -- Display byte counts.
+	lines = false, -- Replace line counter with one that uses the selection.
+	rows = false, -- Display row counts.
+	chars = false, -- Display char counts.
+	chars_ns = false, -- Display char (exc. spaces) counts.
+	chars_nl = false -- Display char (exc. newlines) counts.
 }
 
--- Separators for the Word Count Algo
-M.separators = {
-	-- '@',
-	-- '[',
-	-- ']',
-	-- '}',
-	-- '{',
-	-- '(',
-	-- ')',
-	-- '/',
-	-- '\\',
-	-- ';',
-	-- ':',
-	-- '-',
-	-- '.',
-	-- ',',
-	-- '"',
-	-- "'",
-	-- '*',
-	-- '?',
-	-- '!',
-	-- '\f',
-	'\t', '\n', '\r', ' '
-}
+--- Separators for the Word Count Algorithm.
+-- Default entries are whitespace characters `'\t'`, `'\n'`, `'\r'` and `' '`.
+-- @usage doc_stats.separators[#doc_stats.separators+1] = '-' -- Add '-' to separators
+M.separators = {}
+M.separators[#M.separators+1] = '\t'
+M.separators[#M.separators+1] = '\n'
+M.separators[#M.separators+1] = '\r'
+M.separators[#M.separators+1] = ' '
 
--- Constants for count_chars()
+--- Constant for `doc_stats.count_chars` to include spaces in the count.
 M.ALL_SPACES = 0
+--- Constant for `doc_stats.count_chars` to discard spaces in the count.
 M.DISCARD_SPACES = 1
+--- Constant for `doc_stats.count_chars` to discard newlines in the count.
 M.DISCARD_NEWLINES = 2
 
+--- Count the amount of rows for the current selection.
+-- @return Amount of rows counted.
 function M.count_rows()
 	local sel_row = buffer:line_from_position(buffer.selection_n_end[buffer.main_selection]) -
 		buffer:line_from_position(buffer.selection_n_start[buffer.main_selection]) + 1
@@ -46,12 +62,14 @@ end
 
 -- TODO: When there is no selection, have these return the value for the current line.
 
--- Algo adapted from https://www.countofwords.com/word-count-algorithms-and-how-you-can-use-them.html
 local function checkMatchesSeparator(c)
 	for _, v in ipairs(M.separators) do if (c == v) then return true end end
 	return false
 end
 
+--- Count the amount of words.
+-- @param all Boolean to signify whether to count current selection or "all" of the document.
+-- @return Amount of words counted.
 function M.count_words(all)
 	local state = true
 	local count = 0
@@ -69,11 +87,17 @@ function M.count_words(all)
 	return count
 end
 
+--- Count the amount of bytes.
+-- @param all Boolean to signify whether to count current selection or "all" of the document.
+-- @return Amount of bytes counted.
 function M.count_bytes(all)
 	local contents = all and buffer:get_text() or buffer:get_sel_text()
 	return #contents
 end
 
+--- Count the amount of spaces.
+-- @param all Boolean to signify whether to count current selection or "all" of the document.
+-- @return Amount of spaces counted.
 function M.count_spaces(all)
 	local amount = 0
 	local contents = all and buffer:get_text() or buffer.selection_empty and 0 or
@@ -87,6 +111,9 @@ function M.count_spaces(all)
 	return amount
 end
 
+--- Count the amount of newlines.
+-- @param all Boolean to signify whether to count current selection or "all" of the document.
+-- @return Amount of newlines counted.
 function M.count_newline(all)
 	local amount = 0
 	local contents = all and buffer:get_text() or buffer.selection_empty and 0 or
@@ -109,6 +136,11 @@ function M.count_newline(all)
 	return amount
 end
 
+--- Count the amount of characters.
+-- @param spaces Constant value to signify what whitespace should(n't) be included in the count.
+-- @param all Boolean to signify whether to count current selection or "all" of the document.
+-- @return Amount of chars counted.
+-- @usage local all_chars = doc_stats.count_chars(doc_stats.ALL_SPACES, true)
 function M.count_chars(spaces, all)
 	local start_pos = all and 0 or buffer.selection_empty and 0 or buffer.selection_start
 	local end_pos =
@@ -141,21 +173,19 @@ local function stats_dialog()
 end
 
 -- Insert into tools menu (code adapted from spellcheck module)
-if M.display.menu then
-	_L['Document Statistics'] = '_Document Statistics'
-	doc_stats_menu = {_L['Document Statistics'], stats_dialog}
-	local m_tools = textadept.menu.menubar['Tools']
-	local found_area
-	local SEP = {''}
-	for i = 1, #m_tools - 1 do
-		if not found_area and m_tools[i + 1].title == _L['Bookmarks'] then
-			found_area = true
-		elseif found_area then
-			local label = m_tools[i].title or m_tools[i][1]
-			if 'Document Statistics' < label:gsub('^_', '') or m_tools[i][1] == '' then
-				table.insert(m_tools, i, doc_stats_menu)
-				break
-			end
+_L['Document Statistics'] = '_Document Statistics'
+doc_stats_menu = {_L['Document Statistics'], stats_dialog}
+local m_tools = textadept.menu.menubar['Tools']
+local found_area
+local SEP = {''}
+for i = 1, #m_tools - 1 do
+	if not found_area and m_tools[i + 1].title == _L['Bookmarks'] then
+		found_area = true
+	elseif found_area then
+		local label = m_tools[i].title or m_tools[i][1]
+		if 'Document Statistics' < label:gsub('^_', '') or m_tools[i][1] == '' then
+			table.insert(m_tools, i, doc_stats_menu)
+			break
 		end
 	end
 end
