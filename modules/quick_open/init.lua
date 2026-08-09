@@ -86,7 +86,7 @@ M.explorer = OS == 'windows' and 'explorer.exe' or 'xdg-open'
 --- Git client to open.
 -- Default value is `'lazygit'`.
 -- @usage quick_open.git_client = 'gitui'
-M.git_client = OS == 'windows' and 'lazygit' or 'lazygit.exe'
+M.git_client = OS == 'windows' and 'lazygit.exe' or 'lazygit'
 
 --- Open a terminal at the current buffer's directory.
 -- @param arg[opt] Command to pass to terminal emulator (used to open git client).
