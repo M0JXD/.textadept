@@ -1,15 +1,50 @@
 -- Copyright 2026 Jamie Drinkell. MIT License.
--- buffer_statusbar_text string manipulation utilites
 
+--- Buffer Statusbar Text Manipulation Utilites
+-- Buffer Statusbar Utilties is the very short awaited replacement for both bfstatbar_helper that
+-- was [removed][1] and the [table idea introduced in Textadept's Discussions][2].
+--
+-- It introduces some additional string functions to manage the buffer_statusbar more easily.
+--
+-- Example usage:
+--
+-- ```lua
+-- require('bfstatbar_utils')
+--
+-- -- Remove Line Endings from being displayed
+-- events.connect(events.UPDATE_UI, function (updated)
+-- 	if not updated or updated & 3 == 0 then return end
+-- 	ui.buffer_statusbar_text = ui.buffer_statusbar_text:bst_remove(4)
+-- end)
+--
+-- -- Display whether strip trailing whitespace is on
+-- events.connect(events.UPDATE_UI, function (updated)
+-- 	if not updated or updated & 3 == 0 then return end
+-- 	local strip = 'Strip: ' .. (textadept.editing.strip_trailing_spaces and 'On' or 'Off')
+-- 	ui.buffer_statusbar_text = ui.buffer_statusbar_text:bst_insert(5, strip)
+-- end)
+-- ```
+--
+-- [1]: https://github.com/M0JXD/.textadept-M0JXD/commit/f97274743940cbb4150a379c7e6c2b7cf7a7536d
+-- [2]: https://github.com/orbitalquark/textadept/discussions/688
+-- @module bfstatbar_utils
 local M = {}
 
 local spacing = UI == 'terminal' and '  ' or '    '
 
+--- Counts the entries in the buffer statusbar.
+-- @param str Buffer statusbar string to count entries of.
+-- @return amount of entries in the buffer statusbar.
 function string.bst_count(str)
 	local _, count = str:gsub(spacing, spacing)
 	return count + 1
 end
 
+--- Insert an item into the buffer statusbar.
+-- @param str Current buffer statusbar string to add to.
+-- @param[opt] pos Buffer statusbar position to insert the string (defaults to end).
+-- @param value String to insert.
+-- @return Buffer statusbar string with value inserted at pos.
 function string.bst_insert(str, ...)
 	local text, pos, value
 	local count = str:bst_count()
@@ -38,6 +73,10 @@ function string.bst_insert(str, ...)
 	return text
 end
 
+--- Remove an item into the buffer statusbar.
+-- @param str Current buffer statusbar string to remove from.
+-- @param pos Buffer statusbar position to remove.
+-- @return Buffer statusbar string with value at pos removed.
 function string.bst_remove(str, pos)
 	local text
 	local entry_pat = '%S*%s?%S*' .. spacing
@@ -60,6 +99,11 @@ function string.bst_remove(str, pos)
 	return text
 end
 
+--- Replace an item into the buffer statusbar.
+-- @param str Current buffer statusbar string to replace an entry in.
+-- @param pos Buffer statusbar position to replace.
+-- @param value String to be used as replacement.
+-- @return Buffer statusbar string with value at pos replaced.
 function string.bst_replace(str, pos, value)
 	local text
 	local entry_pat = '%S*%s?%S*' .. spacing
