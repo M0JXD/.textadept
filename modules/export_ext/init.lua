@@ -1,17 +1,30 @@
 -- Copyright 2016-2026 Mitchell. See LICENSE.
 -- Copyright 2026 Jamie Drinkell. See LICENSE.
--- Extensions to the Export menu for PDFs and Markdown
+
+--- Export Extensions for PDFs and Markdown
+--
+-- This module extends the Export module's functionality by adding additional render options:
+--
+-- - Markdown to plain HTML.
+-- - Calling pandoc to convert the current document to HTML, PDF or ODT.
+--
+-- For it to work right it must be added after the official Export module:
+--
 -- ```lua
 -- local export = require('export')
 -- require('export_ext')
 -- ```
+--
+-- The additional options will be available under the "File > Export" menu.
+--
 -- @module export_ext
 local M = {}
 
 --- Command used to open exported HTML files in the user's default web browser.
 M.browser = OS == 'windows' and 'start ""' or OS == 'macos' and 'open' or 'xdg-open'
 
-function check(type)
+--- Checks if the current buffer is a Markdown or LaTeX document.
+local function check(type)
 	if not (buffer:get_lexer() == 'markdown' or buffer:get_lexer() == 'latex') then
 		ui.statusbar_text = "Can't convert " .. buffer:get_lexer() .. ' to ' .. type .. '!'
 		return false
@@ -19,6 +32,9 @@ function check(type)
 	return true
 end
 
+--- Converts Markdown to HTML.
+-- Checks for a installed in `markdown` command (e.g. the perl version or discount)
+-- or falls back to a bundled Lua implementation if it does not exist.
 function M.markdown_to_html()
 	if check('HTML') then
 		-- Prompt the user for the HTML file to export to
@@ -45,6 +61,8 @@ function M.markdown_to_html()
 	end
 end
 
+--- Calls pandoc to convert Markdown or LaTeX files.
+-- @param type Type to document convert to, supports 'html', 'pdf' or 'odt'.
 function M.pandoc(type)
 	if check(type:upper()) then
 		-- Prompt the user for the file to export to
