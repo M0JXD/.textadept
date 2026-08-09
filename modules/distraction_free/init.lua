@@ -1,15 +1,44 @@
--- Based on code by Mitchell
--- Copyright 2020 Mitchell. See LICENSE.
--- Copyright 2025 Jamie Drinkell. MIT License.
+-- Copyright 2020 Mitchell. Copyright 2025-2026 Jamie Drinkell. See LICENSE.
+
+--- Textadept Distraction Free Mode
+-- Based on Mitchell's [Distraction Free Mode][1], but wrapped into a module.
+-- It can hide more UI elements and allows you to configure what you want to hide.
+-- Also works in the terminal version. Defaults to my preferences.
+--
+-- [1]: https://github.com/orbitalquark/textadept/wiki/DistractionFreeMode
+-- @module distraction_free
 local M = {}
 
+--- Whether to hide the menubar.
+-- The default value is `true`.
 M.hide_menubar = true
+
+--- Whether to hide the tabbar.
+-- The default value is `true`.
 M.hide_tabs = true
+
+-- Whether to hide the scrollbars.
+-- The default value is `true`.
 M.hide_scrollbars = true
+
+--- Whether to hide the statusbar.
+-- The default value is `true`.
 M.hide_statusbar = true
+
+--- Whether to hide the margins (line numbers).
+-- The default value is `false`.
 M.hide_margins = false
+
+--- Whether to hide the title in the terminal version.
+-- The default value is `true`.
 M.hide_term_title = true
+
+--- Whether to maximise the window.
+-- The default value is `false`.
 M.maximise = false
+
+--- The shortcut used to toggle distraction free mode.
+-- The default value is `ctrl+f11` except for BSD, which is `f11`.
 M.toggle_shortcut = OS == 'bsd' and 'f11' or 'ctrl+f11'
 
 -- NB: This is carefully connected to the right events instead of generic UPDATE_UI
