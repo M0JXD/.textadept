@@ -15,12 +15,12 @@ and is used to generate the README's. There is:
 
 | Module Name                 | Description                                                                                          |
 | :-------------------------- | :--------------------------------------------------------------------------------------------------- |
-| Theme Manager               | Sets up switched themes and detects missing features (e.g. fonts) to gracefully fallback to defaults |
-| Document Statistics         | Gives details about the buffer such as word count, selected lines etc.                               |
-| Distraction Free            | Updated Distraction Free mode supporting the terminal and taking advantage of new Textadept features |
-| Quick Open                  | Based on "Open Terminal Here", but also allows opening File Browser and TUI Git Clients              |
-| Export Extensions           | Extends the official export module with options to convert Markdown and LaTeX to PDF and HTML        |
 | Buffer Statusbar Utilities  | String manipulation utilities to make adjusting the Buffer Statusbar easier                          |
+| Distraction Free            | Updated Distraction Free mode supporting the terminal and taking advantage of new Textadept features |
+| Document Statistics         | Gives details about the buffer such as word count, selected lines etc.                               |
+| Export Extensions           | Extends the official export module with options to convert Markdown and LaTeX to PDF and HTML        |
+| Quick Open                  | Based on "Open Terminal Here", but also allows opening File Browser and TUI Git Clients              |
+| Theme Manager               | Sets up switched themes and detects missing features (e.g. fonts) to gracefully fallback to defaults |
 
 I usually install Textadept to *~/Applications/textadept/*, I always forget my desktop integration steps so:
 
