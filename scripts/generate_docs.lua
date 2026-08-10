@@ -65,6 +65,7 @@ for _, dir_name in ipairs(dirs) do
 		local file = io.open(dir .. '/README.md')
 		local txt = file:read('*all')
 		txt = txt:gsub("^%s*(.-)%s*$", "%1") .. '\n'
+		txt = txt:gsub("^([^\n]*\n)[^\n]*\n[^\n]*\n?", "%1")
 		file:close()
 		file = io.open(dir .. '/README.md', 'w')
 		file:write(txt)
