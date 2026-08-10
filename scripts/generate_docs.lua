@@ -51,7 +51,11 @@ local function gen_ldoc_command(dir, title)
 		'" --single > ' .. dir .. '/README.md'
 end
 
-os.execute(fetch .. md_filter_url .. ' > markdowndoc.lua')
+if not os.execute(fetch .. md_filter_url .. ' > markdowndoc.lua') then
+	print("Can't fetch markdowndoc.lua, exiting...")
+	os.remove('markdowndoc.lua')
+	os.exit()
+end
 
 local dirs = get_directories('../modules')
 
