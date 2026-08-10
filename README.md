@@ -25,7 +25,7 @@ and is used to generate the README's. There is:
 I usually install Textadept to *~/Applications/textadept/*, I always forget my desktop integration steps so:
 
 - Copy desktop files to *~.local/share/applications/* and SVG icons in *~/.local/share/icons/hicolor/scalable/apps/*.
-- Add this into *.profile*, *.bashrc* or *.bash_profile* (aliases possibly in *.bash_aliases*):
+- Add this into *.profile*, *.bashrc* and *.bash_profile*:
 
 ```bash
 export PATH=$HOME/Applications/textadept:$PATH
