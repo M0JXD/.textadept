@@ -53,17 +53,14 @@ local default_font = (OS == 'windows') and 'Consolas' or (OS == 'macos') and 'Mo
 -- @usage theme_mgr.theme.python = 'xed-dark' -- Set a lexer specific theme
 -- @usage theme_mgr.theme.markdown = {'ayu-mirage', 'catppuccin-macchiato'} -- Light then dark lexer themes
 M.theme = {
-	light = 'light',
-	dark = 'dark',
-	term = 'term'
+	light = 'light', dark = 'dark', term = 'term'
 }
 
 --- Table of font properties to use.
 -- @field family The font to use. Default value is the same as Textadept's default for each OS.
 -- @field size The font size to use. Default value is `12`.
 M.font = {
-	family = default_font,
-	size = 12
+	family = default_font, size = 12
 }
 
 --- Checks if a font is installed on the system.

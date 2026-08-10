@@ -41,10 +41,10 @@ M.display = {
 -- Default entries are whitespace characters `'\t'`, `'\n'`, `'\r'` and `' '`.
 -- @usage doc_stats.separators[#doc_stats.separators+1] = '-' -- Add '-' to separators
 M.separators = {}
-M.separators[#M.separators+1] = '\t'
-M.separators[#M.separators+1] = '\n'
-M.separators[#M.separators+1] = '\r'
-M.separators[#M.separators+1] = ' '
+M.separators[#M.separators + 1] = '\t'
+M.separators[#M.separators + 1] = '\n'
+M.separators[#M.separators + 1] = '\r'
+M.separators[#M.separators + 1] = ' '
 
 --- Constant for `doc_stats.count_chars` to include spaces in the count.
 M.ALL_SPACES = 0
