@@ -1,7 +1,5 @@
 # Textadept Quick Open
 
-Textadept Quick Open
-
 Quickly open a terminal, file explorer or git client at the current buffer's file path.
 
 It's based on <https://github.com/orbitalquark/textadept/wiki/TerminalHere>.

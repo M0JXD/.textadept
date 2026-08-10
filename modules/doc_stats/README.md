@@ -1,7 +1,5 @@
 # Textadept Document Statistics
 
-Textadept Document Statistics
-
 Simple document statistics module, providing additional details about the buffer and selections.
 
 Document Statistics is inspired by the plugin of the same name in the Xed editor, and the

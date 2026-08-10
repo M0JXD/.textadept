@@ -1,7 +1,5 @@
 # Export Extensions for PDFs and Markdown
 
-Export Extensions for PDFs and Markdown
-
 This module extends the Export module's functionality by adding additional render options:
 
 - Markdown to plain HTML.

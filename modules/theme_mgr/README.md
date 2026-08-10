@@ -1,7 +1,5 @@
 # Theme manager for Textadept
 
-Theme manager for Textadept
-
 To truly change themes with the system in Textadept
 [is a bit complicated if you don't want to override the default theme files][1].
 
