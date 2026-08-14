@@ -36,7 +36,6 @@ end
 
 local function append_file(to_append, text)
 	local file = io.open(os.getenv('HOME') .. '/' .. to_append, 'a')
-	if not file then error('Could not open ' .. to_append) end
 	file:write('\n' .. text)
 	file:close()
 end
