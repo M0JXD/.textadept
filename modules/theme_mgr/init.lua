@@ -1,4 +1,4 @@
--- Copyright 2025-2026 Jamie Drinkell. MIT License.
+-- Copyright 2025-2026 Jamie Drinkell. See LICENSE.
 
 --- Theme manager for Textadept
 --

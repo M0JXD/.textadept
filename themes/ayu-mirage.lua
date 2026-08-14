@@ -1,4 +1,4 @@
--- Copyright 2026 Jamie Drinkell. MIT License.
+-- Copyright 2026 Jamie Drinkell. See LICENSE.
 -- Ayu Mirage theme for Textadept.
 -- Using colours from https://ayutheme.com/
 

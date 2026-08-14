@@ -1,4 +1,4 @@
--- Copyright 2025-2026 Jamie Drinkell. MIT License.
+-- Copyright 2025-2026 Jamie Drinkell. See LICENSE.
 -- Xed Light theme for Textadept.
 
 local view, colors, styles = view, view.colors, view.styles

@@ -1,4 +1,4 @@
--- Copyright 2026 Jamie Drinkell. MIT License.
+-- Copyright 2026 Jamie Drinkell. See LICENSE.
 -- Catppuccin Latte theme for Textadept.
 -- Using https://catppuccin.com/palette/ and https://github.com/catppuccin/catppuccin/blob/main/docs/style-guide.md
 

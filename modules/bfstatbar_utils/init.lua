@@ -1,4 +1,4 @@
--- Copyright 2026 Jamie Drinkell. MIT License.
+-- Copyright 2026 Jamie Drinkell. See LICENSE.
 
 --- Buffer Statusbar Text Manipulation Utilities
 --
