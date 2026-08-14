@@ -1,6 +1,6 @@
 -- Copyright 2026 Jamie Drinkell. See LICENSE.
 
---- Run integration steps for XDG compliant desktops (Linux/BSD)
+--- Run integration steps for POSIX systems with XDG compliant desktops (Linux/BSD).
 -- Expects a Textadept installation under *~/Applications/textadept*
 -- Safe to rerun as checks for existing rules when adding the paths/aliases
 -- @usage `textadept -L ~/.textadept/scripts/integrate_xdg.lua`
@@ -44,25 +44,27 @@ local function install_path_aliases()
 	local export = 'export PATH=$HOME/Applications/textadept:$PATH'
 	local aliases =
 		'alias ta="textadept-curses"\nalias ta-gtk="textadept-gtk"\nalias ta-qt="textadept"'
+	local shell_addtions = export .. '\n' .. aliases
 
 	if not check_installed_path_aliases('.profile', export) then
 		print('Exporting install path and adding aliases to ~/.profile...')
-		append_file('.profile', export .. '\n' .. aliases)
+		append_file('.profile', shell_addtions)
 	end
 
 	if not check_installed_path_aliases('.bashrc', export) then
 		print('Exporting install path and adding aliases to ~/.bashrc...')
-		append_file('.bashrc', export .. '\n' .. aliases)
+		append_file('.bashrc', shell_addtions)
 	end
 
 	if not check_installed_path_aliases('.bash_profile', export) then
 		print('Exporting install path and adding aliases to ~/.bash_profile...')
-		append_file('.bash_profile', export .. '\n' .. aliases)
+		append_file('.bash_profile', shell_addtions)
 	end
 end
 
 -- Run installation
+install_path_aliases()
+print('POSIX integration complete!')
 install_icon()
 install_desktops()
-install_path_aliases()
 print('XDG integration complete!')
