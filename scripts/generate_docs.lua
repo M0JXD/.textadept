@@ -1,7 +1,7 @@
 -- Copyright 2026 Jamie Drinkell. See LICENSE.
 
 --- Generate documentation READMEs for submodules using LDoc.
--- Run this in a lua interpreter with LFS available.
+-- Run this in a Lua interpreter with LFS available.
 -- @usage `textadept -L generate_docs.lua`
 
 local lfs = require('lfs')
