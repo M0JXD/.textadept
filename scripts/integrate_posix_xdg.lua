@@ -2,7 +2,6 @@
 
 --- Run integration steps for POSIX systems with XDG compliant desktops (Linux/BSD).
 -- Expects a Textadept installation under *~/Applications/textadept*
--- Safe to rerun as checks for existing rules when adding the paths/aliases
 -- @usage `textadept -L ~/.textadept/scripts/integrate_xdg.lua`
 
 local install = '$HOME/Applications/textadept'
@@ -26,44 +25,30 @@ local function install_desktops()
 		sys_desktop_path)
 end
 
-local function check_installed_path_aliases(to_check, text)
-	local file = io.open(os.getenv('HOME') .. '/' .. to_check, "r")
-	if not file then return true end -- Treat file not existing as 'true' condition
-	local content = file:read("*all")
-	file:close()
-	return string.find(content, text, 1, true) ~= nil
-end
-
-local function append_file(to_append, text)
-	local file = io.open(os.getenv('HOME') .. '/' .. to_append, 'a')
-	file:write('\n' .. text)
-	file:close()
-end
-
-local function install_path_aliases()
-	local export = 'export PATH=$HOME/Applications/textadept:$PATH'
-	local aliases =
-		'alias ta="textadept-curses"\nalias ta-gtk="textadept-gtk"\nalias ta-qt="textadept"'
-	local shell_addtions = export .. '\n' .. aliases
-
-	if not check_installed_path_aliases('.profile', export) then
-		print('Exporting install path and adding aliases to ~/.profile...')
-		append_file('.profile', shell_addtions)
-	end
-
-	if not check_installed_path_aliases('.bashrc', export) then
-		print('Exporting install path and adding aliases to ~/.bashrc...')
-		append_file('.bashrc', shell_addtions)
-	end
-
-	if not check_installed_path_aliases('.bash_profile', export) then
-		print('Exporting install path and adding aliases to ~/.bash_profile...')
-		append_file('.bash_profile', shell_addtions)
-	end
+--- Create starter scripts in *.local/bin*
+local function create_shell_scripts()
+	local script_start =
+		'#!/bin/sh\nexport TEXTADEPT_HOME=\\$HOME/Applications/textadept\n\\$TEXTADEPT_HOME/textadept'
+	local qt = script_start .. ' $@'
+	local gtk = script_start .. '-gtk $@'
+	local term = script_start .. '-curses $@'
+	os.execute('mkdir -p ~/.local/bin')
+	os.execute('echo "' .. qt .. '" > ~/.local/bin/textadept')
+	os.execute('echo "' .. qt .. '" > ~/.local/bin/ta-qt')
+	os.execute('echo "' .. gtk .. '" > ~/.local/bin/textadept-gtk')
+	os.execute('echo "' .. gtk .. '" > ~/.local/bin/ta-gtk')
+	os.execute('echo "' .. term .. '" > ~/.local/bin/textadept-curses')
+	os.execute('echo "' .. term .. '" > ~/.local/bin/ta')
+	os.execute('chmod +x ~/.local/bin/textadept')
+	os.execute('chmod +x ~/.local/bin/ta-qt')
+	os.execute('chmod +x ~/.local/bin/textadept-gtk')
+	os.execute('chmod +x ~/.local/bin/ta-gtk')
+	os.execute('chmod +x ~/.local/bin/textadept-curses')
+	os.execute('chmod +x ~/.local/bin/ta')
 end
 
 -- Run installation
-install_path_aliases()
+create_shell_scripts()
 print('POSIX integration complete!')
 install_icon()
 install_desktops()
