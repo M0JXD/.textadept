@@ -23,4 +23,4 @@ All of the modules I've made are have LDoc documentation. There is:
 | Theme Manager               | Set up switched and per lexer themes, and detects missing features (e.g. fonts).        |
 
 I usually install Textadept to *~/Applications/textadept/* on POSIX systems.
-The script *integrate_posix_xdg.lua* sets up PATH extensions, aliases, desktop files and icons based on this install location.
+The script *integrate_posix_xdg.lua* puts startup scripts, desktop files and icons under the user's *~/.local* directory based on this install location.
