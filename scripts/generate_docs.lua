@@ -42,7 +42,6 @@ local function get_module_title(file_path)
 	return nil
 end
 
-local fetch = OS ~= 'linux' and 'curl -s ' or 'wget -q '
 local md_filter_url =
 	'https://raw.githubusercontent.com/orbitalquark/textadept/refs/heads/default/scripts/markdowndoc.lua'
 
@@ -51,7 +50,7 @@ local function gen_ldoc_command(dir, title)
 		'" --single > ' .. dir .. '/README.md'
 end
 
-if not os.execute(fetch .. md_filter_url .. ' > markdowndoc.lua') then
+if not os.execute('curl -s ' .. md_filter_url .. ' > markdowndoc.lua') then
 	print("Can't fetch markdowndoc.lua, exiting...")
 	os.remove('markdowndoc.lua')
 	os.exit()
