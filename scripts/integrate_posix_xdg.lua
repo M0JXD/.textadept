@@ -29,9 +29,9 @@ end
 local function create_shell_scripts()
 	local script_start =
 		'#!/bin/sh\nexport TEXTADEPT_HOME=\\$HOME/Applications/textadept\n\\$TEXTADEPT_HOME/textadept'
-	local qt = script_start .. ' \\$@'
-	local gtk = script_start .. '-gtk \\$@'
-	local term = script_start .. '-curses \\$@'
+	local qt = script_start .. ' \\"\\$@\\"'
+	local gtk = script_start .. '-gtk \\"\\$@\\"'
+	local term = script_start .. '-curses \\"\\$@\\"'
 	os.execute('mkdir -p ~/.local/bin')
 	os.execute('echo "' .. qt .. '" > ~/.local/bin/textadept')
 	os.execute('echo "' .. qt .. '" > ~/.local/bin/ta-qt')
