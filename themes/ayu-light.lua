@@ -40,7 +40,7 @@ styles[view.STYLE_FOLDDISPLAYTEXT] = {fore = colors.dark_grey, back = colors.lig
 -- Tag styles.
 styles[lexer.ANNOTATION] = {fore = colors.beige}
 styles[lexer.ATTRIBUTE] = {fore = colors.beige}
-styles[lexer.BOLD] = {bold = true}
+styles[lexer.BOLD] = {fore = colors.red, bold = true}
 styles[lexer.CLASS] = {fore = colors.blue}
 styles[lexer.CODE] = {fore = colors.dark_grey, eol_filled = true}
 styles[lexer.COMMENT] = {fore = colors.dark_grey, italic = true}
@@ -53,10 +53,10 @@ styles[lexer.FUNCTION_BUILTIN] = {fore = colors.pink}
 styles[lexer.FUNCTION_METHOD] = {fore = colors.yellow}
 styles[lexer.HEADING] = {fore = colors.green, bold = true}
 -- styles[lexer.IDENTIFIER] = {fore = colors.yellow}
-styles[lexer.ITALIC] = {italic = true}
+styles[lexer.ITALIC] = {fore = colors.red, italic = true}
 styles[lexer.KEYWORD] = {fore = colors.orange}
 styles[lexer.LABEL] = {fore = colors.blue}
-styles[lexer.LINK] = {underline = true}
+styles[lexer.LINK] = {fore = colors.aqua, underline = true}
 styles[lexer.LIST] = {fore = colors.pink}
 styles[lexer.NUMBER] = {fore = colors.violet}
 -- styles[lexer.OPERATOR] = {fore = colors.orange}
