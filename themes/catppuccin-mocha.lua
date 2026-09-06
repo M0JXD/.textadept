@@ -34,7 +34,7 @@ colors.crust     = 0x1b1111
 -- LuaFormatter on
 
 colors.lineback = UI == 'terminal' and 0x422d2c or (0x18000000 + colors.lavender)
-colors.selection = UI == 'terminal' and 0x4f3c3b  or (0x40000000 + colors.overlay_2)
+colors.selection = UI == 'terminal' and 0x4f3c3b or (0x40000000 + colors.overlay_2)
 
 -- Default font.
 if not font then font = OS == 'windows' and 'Consolas' or OS == 'macos' and 'Monaco' or 'Monospace' end
