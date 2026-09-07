@@ -53,7 +53,7 @@ styles[view.STYLE_FOLDDISPLAYTEXT] = {fore = colors.surface_2, back = colors.sur
 -- Tag styles.
 styles[lexer.ANNOTATION] = {fore = colors.yellow}
 styles[lexer.ATTRIBUTE] = {fore = colors.yellow}
-styles[lexer.BOLD] = {fore = colors.red, bold = true}
+styles[lexer.BOLD] = {fore = colors.peach, bold = true}
 styles[lexer.CLASS] = {fore = colors.yellow}
 styles[lexer.CODE] = {fore = colors.overlay_0, eol_filled = true}
 styles[lexer.COMMENT] = {fore = colors.overlay_2, italic = true}
@@ -66,7 +66,7 @@ styles[lexer.FUNCTION_BUILTIN] = {fore = colors.rosewater}
 styles[lexer.FUNCTION_METHOD] = {fore = colors.blue}
 styles[lexer.HEADING] = {fore = colors.red, bold = true}
 -- styles[lexer.IDENTIFIER] = {fore = colors.yellow}
-styles[lexer.ITALIC] = {fore = colors.red, italic = true}
+styles[lexer.ITALIC] = {fore = colors.peach, italic = true}
 styles[lexer.KEYWORD] = {fore = colors.mauve}
 styles[lexer.LABEL] = {fore = colors.subtext_0}
 styles[lexer.LINK] = {fore = colors.blue, underline = true}
@@ -103,7 +103,7 @@ styles.environment_math = styles[lexer.NUMBER]
 -- Makefile.
 -- styles.target = {}
 -- Markdown.
--- styles.hr = {}
+styles.hr = {fore = colors.teal}
 -- Output.
 styles.csi = {visible = false}
 local csi_colors = {
