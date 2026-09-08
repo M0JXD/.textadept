@@ -90,7 +90,7 @@ styles.environment_math = styles[lexer.NUMBER]
 -- Makefile.
 -- styles.target = {}
 -- Markdown.
--- styles.hr = {}
+styles.hr = {fore = colors.dark_grey, bold = true}
 -- Output.
 styles.csi = {visible = false}
 local csi_colors = {
