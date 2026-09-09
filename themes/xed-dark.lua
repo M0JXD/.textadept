@@ -89,7 +89,7 @@ styles.command_section = styles[lexer.HEADING]
 styles.environment = styles[lexer.TYPE]
 styles.environment_math = styles[lexer.NUMBER]
 -- Makefile.
--- styles.target = {}
+styles.target = {fore = colors.purple}
 -- Markdown.
 styles.hr = {fore = colors.blue, bold = true}
 -- Output.
