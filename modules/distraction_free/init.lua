@@ -39,7 +39,7 @@ M.hide_term_title = true
 M.maximise = false
 
 --- The shortcut used to toggle distraction free mode.
--- The default value is `ctrl+f11` except for BSD, which is `f11`.
+-- The default value is `'ctrl+f11'` except for BSD, which is `'f11'`.
 M.toggle_shortcut = OS == 'bsd' and 'f11' or 'ctrl+f11'
 
 -- NB: This is carefully connected to the right events instead of generic UPDATE_UI
