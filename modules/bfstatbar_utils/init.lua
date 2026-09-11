@@ -31,6 +31,7 @@
 -- @module bfstatbar_utils
 local M = {}
 
+--- The spacing gap between each entry.
 local spacing = UI == 'terminal' and '  ' or '    '
 
 --- Counts the entries in the buffer statusbar.
