@@ -38,6 +38,7 @@ if OS ~= 'bsd' then
 	end
 end
 require('lua_repl')
+-- require('lua_repl')
 keys[(UI == 'terminal' and 'meta+O' or 'alt+O')] = require('open_file_mode')
 -- require('scratch')
 local spellcheck = require('spellcheck')
