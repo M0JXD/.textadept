@@ -54,4 +54,4 @@ The default value is `false`.
 
 The shortcut used to toggle distraction free mode.
 
-The default value is `ctrl+f11` except for BSD, which is `f11`.
+The default value is `'ctrl+f11'` except for BSD, which is `'f11'`.

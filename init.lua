@@ -37,7 +37,7 @@ if OS ~= 'bsd' then
 		keys['ctrl+.'] = textadept.menu.menubar['Tools/Language Server/Code Action'][2]
 	end
 end
-require('lua_repl')
+-- require('lua_repl')
 keys[(UI == 'terminal' and 'meta+O' or 'alt+O')] = require('open_file_mode')
 -- require('scratch')
 local spellcheck = require('spellcheck')
@@ -162,7 +162,7 @@ table.insert(textadept.menu.menubar[_L['View']], 20, {
 
 _L['Flip a Coin'] = 'Flip a _Coin'
 math.randomseed(os.time())
-table.insert(textadept.menu.menubar[_L['Help']], 7, {
+table.insert(textadept.menu.menubar[_L['Help']], #textadept.menu.menubar - 2, {
 	_L['Flip a Coin'], function()
 		local flip = math.random(2) > 1 and true or false
 		ui.dialogs.message{
