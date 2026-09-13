@@ -187,6 +187,7 @@ keys['f5'] = reset
 if UI == 'terminal' then
 	keys['meta+L'] = textadept.editing.select_line
 	keys['ctrl+ '] = menubar['Edit/Complete Word'][2]
+	keys['meta+s'] = ui.suspend
 end
 keys[(UI == 'terminal' and 'ctrl+k' or 'ctrl+K')] = buffer.line_delete
 keys[(UI == 'terminal' and 'meta+,' or 'ctrl+,')] = menubar['Edit/Preferences'][2]
