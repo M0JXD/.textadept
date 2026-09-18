@@ -91,7 +91,7 @@ local function lexer_settings()
 		buffer.tab_width = 2
 		if format then format.on_save = true end
 	elseif name == 'text' or name == 'markdown' then
-		view.wrap_mode = view.WRAP_WHITESPACE
+		if buffer.length < 100000 then view.wrap_mode = view.WRAP_WHITESPACE end
 		textadept.editing.strip_trailing_spaces = false
 		doc_stats.display.chars = 3
 		doc_stats.display.words = 3
