@@ -8,19 +8,13 @@ local P, S, B = lpeg.P, lpeg.S, lpeg.B
 local lex = lexer.new(...)
 
 -- Typst Code Expression
-local func = lexer.space^-1 * lexer.word^-1 * '(' * lpeg.C((1 - lpeg.P(")"))^0 * lpeg.P(")"))
-local assignment = lexer.space^-1 * P('= ') *
-	((lexer.word^-1 * lexer.range('(', ')', false, false, true)) + lexer.range('"') +
-		lexer.range('{', '}', false, false, true) + lexer.number + lexer.word)
+local ranges =
+	lexer.range('{', '}', false, false, true) + lexer.range('(', ')', false, false, true) +
+		lexer.word^1 * lexer.space^-1 * lexer.word^-1 * lexer.range('(', ')', false, false, true)^-1
 
-local expression = '#' * lexer.word *
-	-- Optionally followed by...
-	(
-		-- A function or function assignment
-		func * assignment^-1
-		-- An actual assignment
-		+ lexer.space^-1 * lexer.word^-1 * assignment
-	)^-1 * P(';')^-1
+local expression = '#' *
+	(lexer.word * lexer.space^-1 * lexer.word^-1 * ranges^-1 * lexer.space^-1 * P'= ' *
+		(ranges + lexer.range('"') + lexer.number + lexer.word) + ranges) * P(';')^-1
 
 lex:add_rule('expression', lex:tag(lexer.EMBEDDED, expression))
 
