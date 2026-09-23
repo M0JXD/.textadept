@@ -5,10 +5,8 @@
 local lexer = lexer
 local P, S, B = lpeg.P, lpeg.S, lpeg.B
 
--- TODO: Asciidoctor notes *OPTIONAL* Markdown compatibility
--- https://docs.asciidoctor.org/asciidoc/latest/syntax-quick-reference/#markdown-compatibility
--- Do we inherit? It only works with asciidoctor, so not all implementations.
-
+-- This lexer does not accomodate Asciidoctor's optional Markdown compatibility.
+-- Not all implementations of Asciidoc support it, e.g. asciidoctor-go and asciidoc-hs.
 local lex = lexer.new(...)
 
 -- Admonitions.
@@ -20,15 +18,14 @@ lex:set_word_list(lexer.KEYWORD, {"NOTE", "IMPORTANT", "WARNING", "TIP", "CAUTIO
 -- Block elements.
 local function h(n)
 	return lex:tag(string.format('%s.h%s', lexer.HEADING, n),
-		lexer.to_eol(lexer.starts_line((string.rep('=', n) * S(' ') * lexer.alnum)) +
-			string.rep('#', n) * S(' ') * lexer.alnum))
+		lexer.to_eol(lexer.starts_line(string.rep('=', n) * S(' ') * lexer.alnum)))
 end
 lex:add_rule('header', h(6) + h(5) + h(4) + h(3) + h(2) + h(1))
 lex:add_rule('block_title',
 	lex:tag(lexer.HEADING, lexer.to_eol(lexer.starts_line('.') * lexer.alnum)))
 
 lex:add_rule('hr',
-	lex:tag('hr', lpeg.Cmt(lexer.starts_line(lpeg.C(S("*-'")), true), function(input, index, c)
+	lex:tag('hr', lpeg.Cmt(lexer.starts_line(lpeg.C(S("'")), true), function(input, index, c)
 		local line = input:match('[^\r\n]*', index):gsub('[ \t]', '')
 		if line:find('[^' .. c .. ']') or #line < 2 then return nil end
 		return (select(2, input:find('\r?\n', index)) or #input) + 1 -- include \n for eolfilled styles
