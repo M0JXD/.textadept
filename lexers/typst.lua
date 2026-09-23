@@ -7,6 +7,14 @@ local P, S, B = lpeg.P, lpeg.S, lpeg.B
 
 local lex = lexer.new(...)
 
+-- Escaped characters (capture them before other rules)
+lex:add_rule('escapes', P('\\*') + P('\\_') + P('\\;') + P('\\#'))
+
+-- Comments
+local line_comment = lexer.to_eol('//', true)
+local block_comment = lexer.range('/*', '*/')
+lex:add_rule('comment', lex:tag(lexer.COMMENT, line_comment + block_comment))
+
 -- Typst Code Expression
 local ranges =
 	lexer.range('{', '}', false, false, true) + lexer.range('(', ')', false, false, true) +
@@ -70,11 +78,6 @@ function lex:fold(text, start_line, start_level)
 	end
 	return levels
 end
-
--- Comments
-local line_comment = lexer.to_eol('//', true)
-local block_comment = lexer.range('/*', '*/')
-lex:add_rule('comment', lex:tag(lexer.COMMENT, line_comment + block_comment))
 
 lexer.property['scintillua.comment'] = '//'
 
