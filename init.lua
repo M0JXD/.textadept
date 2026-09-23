@@ -64,6 +64,7 @@ lexer.detect_extensions.C = 'cpp'
 lexer.detect_extensions['direwolf.conf'] = 'bash'
 lexer.detect_extensions.h = 'c'
 lexer.detect_extensions.njk = 'html'
+lexer.detect_extensions.typ = 'typst'
 textadept.editing.auto_pairs.text = {}
 textadept.editing.auto_pairs.markdown = {['*'] = '*', ['_'] = '_'}
 events.connect(events.LEXER_LOADED, function(name)
@@ -184,6 +185,7 @@ end)
 local menubar = textadept.menu.menubar
 keys['f2'] = menubar['File/Rename'][2]
 keys['f5'] = reset
+keys['f7'] = function() buffer:set_lexer(buffer:get_lexer()) end
 if UI == 'terminal' then
 	keys['meta+L'] = textadept.editing.select_line
 	keys['ctrl+ '] = menubar['Edit/Complete Word'][2]
