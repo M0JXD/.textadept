@@ -5,64 +5,24 @@
 local lexer = lexer
 local P, S, B = lpeg.P, lpeg.S, lpeg.B
 
--- Typst is essentially three languages for markup, math and scripting
--- So create three lexers and use the embedding rules
--- Markup can be passed into the scripting via [], but embedding it
--- creates an endless loading loop resulting in stack overflow
-local script = lexer.new('script')
-local mathematics = lexer.new('mathematics')
 local lex = lexer.new(...)
 
--- Comment patterns for all lexers
-local line_comment = lexer.to_eol('//', true)
-local block_comment = lexer.range('/*', '*/')
+-- Typst Code Expression
+local func = lexer.space^-1 * lexer.word^-1 * '(' * lpeg.C((1 - lpeg.P(")"))^0 * lpeg.P(")"))
+local assignment = lexer.space^-1 * P('= ') *
+	((lexer.word^-1 * lexer.range('(', ')', false, false, true)) + lexer.range('"') +
+		lexer.range('{', '}', false, false, true) + lexer.number + lexer.word)
 
--- Typst Scripting
+local expression = '#' * lexer.word *
+	-- Optionally followed by...
+	(
+		-- A function or function assignment
+		func * assignment^-1
+		-- An actual assignment
+		+ lexer.space^-1 * lexer.word^-1 * assignment
+	)^-1 * P(';')^-1
 
--- Keywords
-script:add_rule('keyword', script:tag(lexer.KEYWORD, script:word_match(lexer.KEYWORD)))
-
--- Functions.
-local builtin_func = -B('.') *
-	script:tag(lexer.FUNCTION_BUILTIN, script:word_match(lexer.FUNCTION_BUILTIN))
-local func = script:tag(lexer.FUNCTION, lexer.word)
-local method = B('.') * script:tag(lexer.FUNCTION_METHOD, lexer.word)
-script:add_rule('function', (builtin_func + method + func) * '(')
-
--- Strings
-script:add_rule('string', lex:tag(lexer.STRING, P('L')^-1 * lexer.range('"', true)))
-
--- Comments
-script:add_rule('comment', script:tag(lexer.COMMENT, line_comment + block_comment))
-
--- Word Lists
-script:set_word_list(lexer.KEYWORD, {
-	'set', 'let', 'if', 'else', 'for', 'while', 'in', 'not', 'and', 'or', 'import', 'include',
-	'break'
-})
-
--- Typst Mathematics
-
--- Symbols
-mathematics:add_rule('symbols', mathematics:tag(lexer.CONSTANT_BUILTIN,
-	mathematics:word_match(lexer.CONSTANT_BUILTIN)))
-
--- Functions.
-local builtin_func = -B('.') *
-	mathematics:tag(lexer.FUNCTION_BUILTIN, mathematics:word_match(lexer.FUNCTION_BUILTIN))
-local func = mathematics:tag(lexer.FUNCTION, lexer.word)
-local method = B('.') * mathematics:tag(lexer.FUNCTION_METHOD, lexer.word)
-mathematics:add_rule('function', (builtin_func + method + func) * '(')
-
--- Comments
-mathematics:add_rule('comment', mathematics:tag(lexer.COMMENT, line_comment + block_comment))
-
--- Word Lists
-mathematics:set_word_list(lexer.CONSTANT_BUILTIN, {
-	'pi', 'rho', 'phi', 'quad'
-})
-
--- Typst Markup
+lex:add_rule('expression', lex:tag(lexer.EMBEDDED, expression))
 
 -- Headings
 lex:add_rule('header', lex:tag(lexer.HEADING, lexer.to_eol(lexer.starts_line('='))))
@@ -87,8 +47,11 @@ lex:add_rule('link', lex:tag(lexer.LINK, link_url))
 lex:add_rule('strong', lex:tag(lexer.BOLD, lexer.range('*', true)))
 lex:add_rule('em', lex:tag(lexer.ITALIC, lexer.range('_', true)))
 
+-- Math
+lex:add_rule('math', lex:tag(lexer.NUMBER, lexer.range('$')))
+
 -- Plain text.
--- lex:add_rule('word', lex:tag(lexer.DEFAULT, lexer.word_utf8))
+lex:add_rule('word', lex:tag(lexer.DEFAULT, lexer.word_utf8))
 
 local FOLD_HEADER, FOLD_BASE = lexer.FOLD_HEADER, lexer.FOLD_BASE
 -- Fold '=' headers.
@@ -114,18 +77,10 @@ function lex:fold(text, start_line, start_level)
 	return levels
 end
 
+-- Comments
+local line_comment = lexer.to_eol('//', true)
+local block_comment = lexer.range('/*', '*/')
 lex:add_rule('comment', lex:tag(lexer.COMMENT, line_comment + block_comment))
-
--- Embedding
-local math_delimit = lex:tag(lexer.EMBEDDED, P('$') - P('\\$'))
-local script_start = lex:tag(lexer.EMBEDDED, '#' - P('\\#') * #lexer.word)
-local script_end = ';' + P('\n\n') + '\n' * #P('#')
--- + (lexer.word - script:word_match(lexer.KEYWORD))
--- + (lexer.word - (lexer.word * S('(:)')))
-
--- script:embed(lex, P('['), P(']')) -- Stack overflow
-lex:embed(mathematics, math_delimit, math_delimit)
-lex:embed(script, script_start, script_end)
 
 lexer.property['scintillua.comment'] = '//'
 
