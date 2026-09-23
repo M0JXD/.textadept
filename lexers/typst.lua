@@ -29,17 +29,23 @@ local func = script:tag(lexer.FUNCTION, lexer.word)
 local method = B('.') * script:tag(lexer.FUNCTION_METHOD, lexer.word)
 script:add_rule('function', (builtin_func + method + func) * '(')
 
+-- Strings
+script:add_rule('string', lex:tag(lexer.STRING, P('L')^-1 * lexer.range('"', true)))
+
 -- Comments
 script:add_rule('comment', script:tag(lexer.COMMENT, line_comment + block_comment))
 
+-- Word Lists
 script:set_word_list(lexer.KEYWORD, {
 	'set', 'let', 'if', 'else', 'for', 'while', 'in', 'not', 'and', 'or', 'import', 'include',
 	'break'
 })
 
 -- Typst Mathematics
--- mathematics:add_rule('keyword',
--- 	mathematics:tag(lexer.KEYWORD, mathematics:word_match(lexer.KEYWORD)))
+
+-- Symbols
+mathematics:add_rule('symbols', mathematics:tag(lexer.CONSTANT_BUILTIN,
+	mathematics:word_match(lexer.CONSTANT_BUILTIN)))
 
 -- Functions.
 local builtin_func = -B('.') *
@@ -49,7 +55,12 @@ local method = B('.') * mathematics:tag(lexer.FUNCTION_METHOD, lexer.word)
 mathematics:add_rule('function', (builtin_func + method + func) * '(')
 
 -- Comments
-mathematics:add_rule('comment', lex:tag(lexer.COMMENT, line_comment + block_comment))
+mathematics:add_rule('comment', mathematics:tag(lexer.COMMENT, line_comment + block_comment))
+
+-- Word Lists
+mathematics:set_word_list(lexer.CONSTANT_BUILTIN, {
+	'pi', 'rho', 'phi', 'quad'
+})
 
 -- Typst Markup
 
@@ -58,9 +69,6 @@ lex:add_rule('header', lex:tag(lexer.HEADING, lexer.to_eol(lexer.starts_line('='
 
 -- Lists
 lex:add_rule('list', lex:tag(lexer.LIST, lexer.starts_line(S('*+-'), true) * S(' \t')))
-
--- Strings
-lex:add_rule('string', lex:tag(lexer.STRING, P('L')^-1 * lexer.range('"', true)))
 
 -- Raw Text
 local raw_text = lpeg.Cmt(lpeg.C(P('`')^1), function(input, index, bt)
@@ -80,7 +88,7 @@ lex:add_rule('strong', lex:tag(lexer.BOLD, lexer.range('*', true)))
 lex:add_rule('em', lex:tag(lexer.ITALIC, lexer.range('_', true)))
 
 -- Plain text.
-lex:add_rule('word', lex:tag(lexer.DEFAULT, lexer.word_utf8))
+-- lex:add_rule('word', lex:tag(lexer.DEFAULT, lexer.word_utf8))
 
 local FOLD_HEADER, FOLD_BASE = lexer.FOLD_HEADER, lexer.FOLD_BASE
 -- Fold '=' headers.
@@ -112,11 +120,13 @@ lex:add_rule('comment', lex:tag(lexer.COMMENT, line_comment + block_comment))
 local math_delimit = lex:tag(lexer.EMBEDDED, P('$') - P('\\$'))
 local script_start = lex:tag(lexer.EMBEDDED, '#' - P('\\#') * #lexer.word)
 local script_end = ';' + P('\n\n') + '\n' * #P('#')
-	-- + (lexer.word - script:word_match(lexer.KEYWORD))
-	-- + (lexer.word - (lexer.word * S('(:)')))
+-- + (lexer.word - script:word_match(lexer.KEYWORD))
+-- + (lexer.word - (lexer.word * S('(:)')))
 
 -- script:embed(lex, P('['), P(']')) -- Stack overflow
 lex:embed(mathematics, math_delimit, math_delimit)
 lex:embed(script, script_start, script_end)
+
+lexer.property['scintillua.comment'] = '//'
 
 return lex
