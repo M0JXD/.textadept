@@ -65,6 +65,7 @@ lexer.detect_extensions['direwolf.conf'] = 'bash'
 lexer.detect_extensions.h = 'c'
 lexer.detect_extensions.njk = 'html'
 lexer.detect_extensions.typ = 'typst'
+lexer.detect_extensions.typst = 'typst'
 textadept.editing.auto_pairs.text = {}
 textadept.editing.auto_pairs.markdown = {['*'] = '*', ['_'] = '_'}
 events.connect(events.LEXER_LOADED, function(name)
@@ -91,7 +92,7 @@ local function lexer_settings()
 	elseif name == 'dart' then
 		buffer.tab_width = 2
 		if format then format.on_save = true end
-	elseif name == 'text' or name == 'markdown' then
+	elseif name == 'text' or name == 'markdown' or name == 'typst' then
 		if buffer.length < 100000 then view.wrap_mode = view.WRAP_WHITESPACE end
 		textadept.editing.strip_trailing_spaces = false
 		doc_stats.display.chars = 3
