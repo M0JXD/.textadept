@@ -5,16 +5,12 @@
 #variable = 10 + 2 + 4
 
 #if 1 < 2 {
-
-}
-  This is shown
-] else if 3 < 2 [
+  variable
+} else if 3 < 2 [
   This is not.
-] else [
-   More content.
-]
-
-
+] else {
+   variable * 2
+}
 
 // A comment is always of this form no matter the "mode"
 
@@ -72,5 +68,9 @@ $ pi F_n = round(1 / sqrt(5) phi.alt^n), quad phi.alt = (1 + sqrt(5)) / 2 $
   [a = #a, b = #b]
 }
 
-#align()
+#align(center + bottom)[
+  *Glaciers form an important
+  part of the earth's climate
+  system.*
+]
 
