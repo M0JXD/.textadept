@@ -57,7 +57,6 @@ $ pi F_n = round(1 / sqrt(5) phi.alt^n), quad phi.alt = (1 + sqrt(5)) / 2 $
   (n,)
 }
 
-
 // Markup can be passed as content into code mode via []
 #link("https://typst.app")[== Linked Subheading]
 
