@@ -2,7 +2,15 @@
 #set page(width: 10cm, height: auto)
 #set heading(numbering: "1.")
 #let variable = "a variable"
-#variable = 10
+#variable = 10 + 2 + 4
+
+#if 1 < 2 [
+  This is shown
+] else if 3 < 2 [
+  This is not.
+] else [
+   More content.
+]
 
 // A comment is always of this form no matter the "mode"
 
