@@ -1,6 +1,6 @@
 // See: https://github.com/msakuta/typst-test/blob/master/euler-lagrange.typ
 
-#set page(;
+#set page(
   numbering: "1",
 )
 #set heading(numbering: "1.")
