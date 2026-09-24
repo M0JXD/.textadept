@@ -54,10 +54,10 @@ local assignment = varwithdot * P' = ' * assignables * (P' ' * (operators * ' ' 
 local let_bind = P'let ' * varwithdot * P' = ' *
 	(parenthesized + assignables * (P' ' * (operators * ' ' * assignables))^0)
 local named_func = P'let ' * func * P' = ' * (parenthesized + code_block + lexer.to_eol())
-local conditional_if = P'if ' * varwithdot * ' ' * S'-+*/=!<>'^-2 * ' ' * code_content
+local conditional_if = P'if ' * assignables * (P' ' * (operators * ' ' * assignables))^0 * ' ' * code_content
 local conditional = conditional_if * P' else ' * (conditional_if * (P' else '^-1) + code_content)^0
 local for_loop = P'for ' * varwithdot * P' in ' * assignables * ' ' * code_content
-local while_loop = P'while ' * varwithdot * ' ' * S'-+*/=!<>'^-2 * ' ' * assignables * ' ' *
+local while_loop = P'while ' * varwithdot * ' ' * operators * ' ' * assignables * ' ' *
 	code_content
 local set_rule = P'set ' * func
 local set_if = set_rule * conditional
@@ -67,7 +67,7 @@ local import = P'import ' * string_type * ((P': ' + P' as ') * lexer.to_eol())^-
 
 local expression = '#' *
 	(code_block + parenthesized + content + func + let_bind + named_func + set_if + set_rule +
-		for_loop + while_loop + assignment + include + import + show + varwithdot) * P';'^-1
+		for_loop + while_loop + conditional + assignment + include + import + show + varwithdot) * P';'^-1
 
 lex:add_rule('expression', lex:tag(lexer.EMBEDDED, expression))
 
