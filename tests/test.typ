@@ -67,6 +67,16 @@ $ pi F_n = round(1 / sqrt(5) phi.alt^n), quad phi.alt = (1 + sqrt(5)) / 2 $
   [a = #a, b = #b]
 }
 
+==== Random Heading
+
+#align(center, table(
+    columns: count,
+    ..nums.map(n => $F_#n$),
+    ..nums.map(n => str(fib(n)))
+))
+
+== A new Heading
+
 #align(center + bottom)[
   *Glaciers form an important
   part of the earth's climate
