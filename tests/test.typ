@@ -1,8 +1,8 @@
 // Example Typst document
 #set page(width: 10cm, height: auto)
 #set heading(numbering: "1.")
-#let variable = "a variable"
-#variable = 10 + 2 + 4
+#let variable = [_\# syntax_]
+#variable = (10 + 2 + 4)
 
 #if 1 < 2 {
   variable
