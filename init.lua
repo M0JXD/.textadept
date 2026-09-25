@@ -78,6 +78,7 @@ textadept.editing.highlight_words = textadept.editing.HIGHLIGHT_SELECTED
 textadept.run.run_in_background = true
 ui.find.highlight_all_matches = true
 view.edge_column = 100
+view.wrap_indent_mode = view.WRAPINDENT_SAME
 local function lexer_settings()
 	buffer.tab_width = 4
 	buffer.use_tabs = false
