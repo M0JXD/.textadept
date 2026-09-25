@@ -94,7 +94,7 @@ local function lexer_settings()
 		if format then format.on_save = true end
 	elseif name == 'text' or name == 'markdown' or name == 'typst' then
 		if buffer.length < 100000 then view.wrap_mode = view.WRAP_WHITESPACE end
-		textadept.editing.strip_trailing_spaces = false
+		if name ~= 'typst' then textadept.editing.strip_trailing_spaces = false end
 		doc_stats.display.chars = 3
 		doc_stats.display.words = 3
 	end
