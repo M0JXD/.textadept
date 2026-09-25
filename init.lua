@@ -109,6 +109,8 @@ textadept.run.build_commands['xmake.lua'] = 'xmake'
 textadept.run.compile_commands.python = (OS == 'windows' and 'py' or 'python') .. ' -m flake8 %f' -- Run a linter
 textadept.run.compile_commands.ino = 'arduino-cli compile -b arduino:avr:nano "%p"' -- Verify
 textadept.run.run_commands.ino = 'arduino-cli upload "%p" -b arduino:avr:nano -p /dev/ttyACM0' -- Upload
+textadept.run.compile_commands.typ = 'typst c "%f"'
+textadept.run.run_commands.typ = 'xdg-open "%e.pdf"'
 
 -- Extra Utilities
 _L['Rename'] = '_Rename'
