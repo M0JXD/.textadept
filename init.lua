@@ -28,7 +28,7 @@ format.commands.typescript = prettier_formatter
 format.commands.markdown = prettier_formatter
 format.commands.yaml = prettier_formatter
 format.commands.python = OS == 'windows' and 'py' or 'python' .. ' -m black -'
-format.commands.typst = 'typstyle -l 120 -t 4 --wrap-text=fill'
+format.commands.typst = 'typstyle -l 120 -t 4 --wrap-text=sentence'
 local lsp = false
 if OS ~= 'bsd' then
 	lsp = require('lsp')
