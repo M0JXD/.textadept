@@ -43,13 +43,12 @@ lex:add_rule('em', lex:tag(lexer.ITALIC, lexer.range('_', true)))
 -- Code Expressions
 -- Using rules from: https://typst.app/docs/reference/syntax/#code
 local operators = S'-+*/=!<>'^-2 + P'not' + P'in' + P'and' + P'or'
-local string_type = lexer.range('"')
 local code_block = lexer.range('{', '}', false, false, true)
 local parenthesized = lexer.range('(', ')', false, false, true)
 local content = lexer.range('[', ']', false, false, true)
 local code_content = code_block + content
 local func = variable * parenthesized * content^-1
-local assignables = string_type + func + lexer.number + parenthesized + variable + code_content
+local assignables = lexer.range('"') + func + lexer.number + parenthesized + variable + code_content
 local assignment = variable * P' = ' * assignables * (' ' * (operators * ' ' * assignables))^0
 local let_bind = P'let ' * variable * P' = ' *
 	(parenthesized + assignables * (' ' * (operators * ' ' * assignables))^0)
@@ -62,8 +61,8 @@ local while_loop = P'while ' * variable * ' ' * operators * ' ' * assignables * 
 local set_rule = P'set ' * func
 local set_if = set_rule * conditional
 local show = P'show' * (': ' + (' ' * variable)) * S': '^-2 * (func + set_rule + variable)
-local include = P'include ' * string_type
-local import = P'import ' * string_type * ((P': ' + P' as ') * lexer.to_eol())^-1
+local include = P'include ' * lexer.range('"')
+local import = P'import ' * lexer.range('"') * ((P': ' + P' as ') * lexer.to_eol())^-1
 
 local expression = '#' *
 	(code_block + parenthesized + content + func + let_bind + named_func + set_if + set_rule +
