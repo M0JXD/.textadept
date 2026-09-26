@@ -63,6 +63,7 @@ $ pi F_n = round(1 / sqrt(5) phi.alt^n), quad phi.alt = (1 + sqrt(5)) / 2 $
 #{
   let a = 1
   let b = 2
+  // Sadly comments in expressions are also caputured.
   (a, b) = (b, a)
   [a = #a, b = #b]
 }
