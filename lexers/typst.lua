@@ -17,7 +17,7 @@ local block_comment = lexer.range('/*', '*/')
 lex:add_rule('comment', lex:tag(lexer.COMMENT, line_comment + block_comment))
 
 -- Headings
-lex:add_rule('header', lex:tag(lexer.HEADING, lexer.to_eol(lexer.starts_line('='))))
+lex:add_rule('header', lex:tag(lexer.HEADING, lexer.to_eol(lexer.starts_line('=', true))))
 
 -- Lists
 lex:add_rule('list', lex:tag(lexer.LIST, lexer.starts_line(S('+-'), true) * S(' \t')))
