@@ -171,9 +171,9 @@ end
 
 --- Applies theme to command entry.
 function M.theme_command_entry()
-	local theme = UI == 'terminal' and M.theme.term or (_THEME == 'dark') and M.theme.dark or
-		M.theme.light
 	pcall(function()
+		local theme = UI == 'terminal' and M.theme.term or (_THEME == 'dark') and M.theme.dark or
+			M.theme.light
 		ui.command_entry:set_theme(theme, {font = M.font.family, size = M.font.size})
 	end)
 end
@@ -210,6 +210,7 @@ end
 local function init()
 	init_checks()
 	M.theme_all_views(false)
+	M.theme_command_entry()
 end
 events.connect(events.INITIALIZED, init)
 
