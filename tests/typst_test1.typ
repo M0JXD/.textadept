@@ -20,6 +20,11 @@ are also available */
 
 = Main Heading
 
+```python
+def func()
+    print("Hello!")
+```
+
 == Subheading
 A link is like so: https://typst.app/
 
