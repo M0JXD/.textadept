@@ -29,11 +29,8 @@ local raw_text = lpeg.Cmt(lpeg.C(P('`')^1), function(input, index, bt)
 end)
 lex:add_rule('raw', lex:tag(lexer.CODE, raw_text))
 
--- Labels
-lex:add_rule('label', lex:tag(lexer.LABEL, lexer.range('<', '>', false, false, true)))
-
 -- References
-local variable = lexer.word_utf8 * (S'-.'^-1 * lexer.word_utf8)^0
+local variable = lex:tag(lexer.VARIABLE, lexer.word_utf8 * (S'-.'^-1 * lexer.word_utf8)^0)
 lex:add_rule('reference', lex:tag(lexer.REFERENCE, '@' * variable))
 
 -- Strong and Emphasis
@@ -42,33 +39,40 @@ lex:add_rule('em', lex:tag(lexer.ITALIC, lexer.range('_', true)))
 
 -- Code Expressions
 -- Using rules from: https://typst.app/docs/reference/syntax/#code
-local operators = S'-+*/=!<>'^-2 + P'not' + P'in' + P'and' + P'or'
+local operators = lex:tag(lexer.OPERATOR, S'-+*/=!<>'^-2 + P'not' + P'in' + P'and' + P'or')
+local paren = lexer.range('(', ')', false, false, true)
 local code_block = lexer.range('{', '}', false, false, true)
-local parenthesized = lexer.range('(', ')', false, false, true)
 local content = lexer.range('[', ']', false, false, true)
-local code_content = code_block + content
-local func = variable * parenthesized * content^-1
-local assignables = lexer.range('"') + func + lexer.number + parenthesized + variable + code_content
+local code_content = #(code_block + content)
+local capture_code_content = lex:tag(lexer.EMBEDDED, code_block) + lex:tag(lexer.STRING, content)
+local func = lex:tag(lexer.FUNCTION, variable) * paren
+local assignables = lex:tag(lexer.STRING, lexer.range('"')) + func + lex:tag(lexer.NUMBER, lexer.number) + paren + variable + code_content
 local assignment = variable * P' = ' * assignables * (' ' * (operators * ' ' * assignables))^0
-local let_bind = P'let ' * variable * P' = ' *
-	(parenthesized + assignables * (' ' * (operators * ' ' * assignables))^0)
-local named_func = P'let ' * func * P' = ' * (parenthesized + code_block + lexer.to_eol())
-local conditional_if = P'if ' * assignables * (' ' * (operators * ' ' * assignables))^0 * ' ' *
-	code_content
-local conditional = conditional_if * (P' else ' * conditional_if * (P' else '^-1) + code_content)^0
-local for_loop = P'for ' * variable * P' in ' * assignables * ' ' * code_content
-local while_loop = P'while ' * variable * ' ' * operators * ' ' * assignables * ' ' * code_content
-local set_rule = P'set ' * func
+local let_kw = lex:tag(lexer.KEYWORD, P'let')
+local let_bind = let_kw * ' ' * variable * P' = ' *
+	('(' + assignables * (' ' * (operators * ' ' * assignables))^0)
+local named_func = let_kw * ' ' * func * P' = ' * (paren + code_block + lexer.to_eol())
+local conditional_if = lex:tag(lexer.KEYWORD, P'if') * ' ' * assignables * (' ' * (operators * ' ' * assignables))^0 * ' ' *
+	capture_code_content
+local else_kw = lex:tag(lexer.KEYWORD, P'else')
+local conditional = conditional_if * (' ' * else_kw * ' ' * conditional_if * ((' ' * else_kw * ' ')^-1) + capture_code_content^1)^0
+local for_loop = lex:tag(lexer.KEYWORD, P'for') * ' ' * variable * ' ' * lex:tag(lexer.KEYWORD, P'in') * ' ' * assignables * ' ' * code_content
+local while_loop = lex:tag(lexer.KEYWORD, P'while') * ' ' * variable * ' ' * operators * ' ' * assignables * ' ' * code_content
+local set_rule = lex:tag(lexer.KEYWORD, P'set') * ' ' * func
 local set_if = set_rule * conditional
-local show = P'show' * (': ' + (' ' * variable)) * S': '^-2 * (func + set_rule + variable)
-local include = P'include ' * lexer.range('"')
-local import = P'import ' * lexer.range('"') * ((P': ' + P' as ') * lexer.to_eol())^-1
+local show = lex:tag(lexer.KEYWORD, P'show') * (': ' + (' ' * variable)) * S': '^-2 * (func + set_rule + variable)
+local include = lex:tag(lexer.KEYWORD, P'include') * ' ' * lexer.range('"')
+local import = lex:tag(lexer.KEYWORD, P'import') * ' ' * lexer.range('"') * (P': ' + (' ' * lex:tag(lexer.KEYWORD, P'as') * ' ') * lexer.to_eol())^-1
 
 local expression = '#' *
 	(for_loop + while_loop + include + import + show + conditional + set_if + set_rule + let_bind +
-		parenthesized + code_content + func + named_func + assignment + variable) * P';'^-1
+		paren + capture_code_content + func + named_func + assignment + variable) * P';'^-1
 
-lex:add_rule('expression', lex:tag(lexer.EMBEDDED, expression))
+-- lex:add_rule('expression', lex:tag(lexer.EMBEDDED, expression))
+lex:add_rule('expression', expression)
+
+-- Labels
+lex:add_rule('label', lex:tag(lexer.LABEL, lexer.range('<', '>', true, false, true) - (P'<=' + P'< ')))
 
 -- Math
 lex:add_rule('math', lex:tag(lexer.NUMBER, lexer.range('$')))
