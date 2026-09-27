@@ -58,7 +58,7 @@ lex:add_rule('variable', lex:tag(lexer.VARIABLE, lpeg.B'#' * tagged_variable))
 lex:add_rule('for', lex:tag(lexer.KEYWORD, P'for' * #(ws * var_or_string * ws * P'in' * #(ws * var_or_string * ws * S'[{'))))
 lex:add_rule('while', lex:tag(lexer.KEYWORD, P'while' * #(ws * ((var_or_string + operators) * ws)^0 * S'[{')))
 lex:add_rule('if', lex:tag(lexer.KEYWORD, P'if' * #(ws * ((var_or_string + operators) * ws)^0 * S'[{')))
-lex:add_rule('string', lex:tag(lexer.STRING, (lpeg.B(S'(') + lpeg.B(P': ' + P'= ') + lpeg.B(P'import ') + lpeg.B(P'include ') + lpeg.B(P'in ')) * lexer.range('"')))
+lex:add_rule('string', lex:tag(lexer.STRING, lexer.range('"') * #((S':,)') + (ws * S'[{'))))
 
 local units = P'fr' + P'pt' + P'cm' + P'%'
 lex:add_rule('numbers', lex:tag(lexer.NUMBER, (lpeg.B(P', ' + P': ') + lpeg.B('(')) * lexer.number * units^-1) * #S',)')
