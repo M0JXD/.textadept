@@ -24,6 +24,7 @@ are also available */
 = Top Level Heading
 
 Raw text for Python below:
+I have a string "asdf".
 
 ```python
 def func()
