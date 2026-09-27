@@ -60,7 +60,7 @@ lex:add_rule('in', lex:tag(lexer.KEYWORD, P'in' * #(ws * var_or_string * ws * S'
 lex:add_rule('while', lex:tag(lexer.KEYWORD,
 	P'while' * #(ws * ((var_or_string + operators^2) * ws)^0 * S'[{')))
 lex:add_rule('variable', lex:tag(lexer.VARIABLE, lpeg.B'#' * variable))
-lex:add_rule('string', lex:tag(lexer.STRING, lexer.range('"') * #((S':,)') + (ws * S'[{'))))
+lex:add_rule('string', lex:tag(lexer.STRING, lexer.range('"') * #((S'\n:,)') + (ws * S'[{'))))
 lex:add_rule('numeric', lex:tag(lexer.NUMBER,
 	(lpeg.B(P', ' + P': ' + (S'-+*/=!<>{' * P' ')) + lpeg.B('(')) * lexer.number *
 		lex:word_match('units')^-1) * #S',)')
