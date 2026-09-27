@@ -8,7 +8,7 @@ local P, S = lpeg.P, lpeg.S
 local lex = lexer.new(...)
 
 -- Escaped characters (capture them before other rules)
-lex:add_rule('escapes', P('\\*') + P('\\_') + P('\\;') + P('\\#') + P('\\<') + P('\\>'))
+lex:add_rule('escapes', P('\\*') + P('\\_') + P('\\;') + P('\\#') + P('\\<') + P('\\>') + P'\\$')
 
 -- Comments
 -- Don't try to capture URLs as comments
@@ -49,19 +49,18 @@ local tagged_variable = lex:tag(lexer.VARIABLE, variable)
 local var_or_string = P'"'^-1 * (tagged_variable + lexer.number) * P'"'^-1
 lex:add_rule('function', lex:tag(lexer.FUNCTION, tagged_variable * #P'('))
 
--- Match some more keywords if they seem like they are situationally in a code expression
+-- Match some more code mode aspects if they seem like they are situationally in a expression
 local ws = lexer.space^1
-lex:add_rule('else_if', lex:tag(lexer.KEYWORD, (P'else' * ws * P'if'^-1) - (-lpeg.B(S']}' * ' ') * P'else')))
-lex:add_rule('in', lex:tag(lexer.KEYWORD, P'in' * #(ws * var_or_string * ws * S'[{')))
 lex:add_rule('let_bind', lex:tag(lexer.KEYWORD, P'let' * #(' ' * tagged_variable * P' =')))
-lex:add_rule('variable', lex:tag(lexer.VARIABLE, lpeg.B'#' * tagged_variable))
+lex:add_rule('else_if', lex:tag(lexer.KEYWORD, (P'else' * ws * P'if'^-1) - (-lpeg.B(S']}' * ' ') * P'else')))
+lex:add_rule('if', lex:tag(lexer.KEYWORD, P'if' * #(ws * ((var_or_string + operators^2) * ws)^0 * S'[{')))
 lex:add_rule('for', lex:tag(lexer.KEYWORD, P'for' * #(ws * var_or_string * ws * P'in' * #(ws * var_or_string * ws * S'[{'))))
-lex:add_rule('while', lex:tag(lexer.KEYWORD, P'while' * #(ws * ((var_or_string + operators) * ws)^0 * S'[{')))
-lex:add_rule('if', lex:tag(lexer.KEYWORD, P'if' * #(ws * ((var_or_string + operators) * ws)^0 * S'[{')))
+lex:add_rule('in', lex:tag(lexer.KEYWORD, P'in' * #(ws * var_or_string * ws * S'[{')))
+lex:add_rule('while', lex:tag(lexer.KEYWORD, P'while' * #(ws * ((var_or_string + operators^2) * ws)^0 * S'[{')))
+lex:add_rule('variable', lex:tag(lexer.VARIABLE, lpeg.B'#' * tagged_variable))
 lex:add_rule('string', lex:tag(lexer.STRING, lexer.range('"') * #((S':,)') + (ws * S'[{'))))
 
-local units = P'fr' + P'pt' + P'cm' + P'%'
-lex:add_rule('numbers', lex:tag(lexer.NUMBER, (lpeg.B(P', ' + P': ') + lpeg.B('(')) * lexer.number * units^-1) * #S',)')
+lex:add_rule('numbers', lex:tag(lexer.NUMBER, (lpeg.B(P', ' + P': ' + (S'-+*/=!<>{' * P' ')) + lpeg.B('(')) * lexer.number * lex:word_match('units')^-1) * #S',)')
 
 -- Labels
 lex:add_rule('label',
@@ -105,6 +104,18 @@ end
 -- Keywords that may be immediately after a '#'
 lex:set_word_list(lexer.KEYWORD, {
 	'let', 'set', 'show', 'while', 'for', 'if', 'include', 'import'
+})
+
+-- Unit types
+lex:set_word_list('units', {
+	-- Fractions
+	'fr',
+	-- Length
+	'pt', 'mm', 'cm', 'in', 'em',
+	-- Angles
+	'deg', 'rad',
+	-- Ratio
+	'%'
 })
 
 
