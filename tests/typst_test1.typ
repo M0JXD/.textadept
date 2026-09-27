@@ -86,7 +86,11 @@ $ pi F_n = round(1 / sqrt(5) phi.alt^n), quad phi.alt = (1 + sqrt(5)) / 2 $
 
     }
 
-    while false {
+    if 2 < 3 {
+
+    }
+
+    while false < 2 {
         #variable
     }
 }
@@ -107,4 +111,4 @@ $ pi F_n = round(1 / sqrt(5) phi.alt^n), quad phi.alt = (1 + sqrt(5)) / 2 $
 
 My new lexer can sometimes incorrectly highlight keywords, e.g.
 
-The protagonist (for whom in there [or so they thought] dream) discovered their true purpose.
+The protagonist (for whom in their [or so they thought] dream) discovered their true purpose.
