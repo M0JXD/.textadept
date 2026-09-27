@@ -40,17 +40,17 @@ lex:add_rule('em', lex:tag(lexer.ITALIC, lexer.range('_')))
 
 -- Code Expressions
 -- Using rules from: https://typst.app/docs/reference/syntax/#code
-local variable = lexer.word_utf8 * (S'-.'^-1 * lexer.word_utf8)^0
-local ws = lexer.space^1
 lex:add_rule('code_start', lex:tag(lexer.EMBEDDED, P'#' - lpeg.B('\\') * P'#'))
 lex:add_rule('keyword', lex:tag(lexer.KEYWORD, lpeg.B'#' * lex:word_match(lexer.KEYWORD)))
 
 local operators = S'-+*/=!<>' + P'not' + P'in' + P'and' + P'or'
+local variable = lexer.word_utf8 * (S'-.'^-1 * lexer.word_utf8)^0
 local tagged_variable = lex:tag(lexer.VARIABLE, variable)
 local var_or_string = P'"'^-1 * (tagged_variable + lexer.number) * P'"'^-1
 lex:add_rule('function', lex:tag(lexer.FUNCTION, tagged_variable * #P'('))
 
 -- Match some more keywords if they seem like they are situationally in a code expression
+local ws = lexer.space^1
 lex:add_rule('else_if', lex:tag(lexer.KEYWORD, (P'else' * ws * P'if'^-1) - (-lpeg.B(S']}' * ' ') * P'else')))
 lex:add_rule('in', lex:tag(lexer.KEYWORD, P'in' * #(ws * var_or_string * ws * S'[{')))
 lex:add_rule('let_bind', lex:tag(lexer.KEYWORD, P'let' * #(' ' * tagged_variable * P' =')))
@@ -58,10 +58,7 @@ lex:add_rule('variable', lex:tag(lexer.VARIABLE, lpeg.B'#' * tagged_variable))
 lex:add_rule('for', lex:tag(lexer.KEYWORD, P'for' * #(ws * var_or_string * ws * P'in' * #(ws * var_or_string * ws * S'[{'))))
 lex:add_rule('while', lex:tag(lexer.KEYWORD, P'while' * #(ws * ((var_or_string + operators) * ws)^0 * S'[{')))
 lex:add_rule('if', lex:tag(lexer.KEYWORD, P'if' * #(ws * ((var_or_string + operators) * ws)^0 * S'[{')))
-
-lex:set_word_list(lexer.KEYWORD, {
-	'let', 'set', 'show', 'while', 'for', 'if', 'include', 'import'
-})
+lex:add_rule('string', lex:tag(lexer.STRING, (lpeg.B(S'(') + lpeg.B(P': ' + P'= ') + lpeg.B(P'import ') + lpeg.B(P'include ') + lpeg.B(P'in ')) * lexer.range('"')))
 
 -- Labels
 lex:add_rule('label',
@@ -101,6 +98,12 @@ function lex:fold(text, start_line, start_level)
 	end
 	return levels
 end
+
+-- Keywords that may be immediately after a '#'
+lex:set_word_list(lexer.KEYWORD, {
+	'let', 'set', 'show', 'while', 'for', 'if', 'include', 'import'
+})
+
 
 lexer.property['scintillua.comment'] = '//'
 
