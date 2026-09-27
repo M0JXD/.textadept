@@ -10,7 +10,7 @@
   This is not.
 ] else {
    variable * 2
-}
+} <label>
 
 // A comment is always of this form no matter the "mode"
 
