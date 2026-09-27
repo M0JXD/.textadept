@@ -44,22 +44,20 @@ lex:add_rule('code_start', lex:tag(lexer.EMBEDDED, P'#' - lpeg.B('\\') * P'#'))
 lex:add_rule('keyword', lex:tag(lexer.KEYWORD, lpeg.B'#' * lex:word_match(lexer.KEYWORD)))
 
 local operators = S'-+*/=!<>' + P'not' + P'in' + P'and' + P'or'
-local variable = lexer.word_utf8 * (S'-.'^-1 * lexer.word_utf8)^0
-local tagged_variable = lex:tag(lexer.VARIABLE, variable)
-local var_or_string = P'"'^-1 * (tagged_variable + lexer.number) * P'"'^-1
-lex:add_rule('function', lex:tag(lexer.FUNCTION, tagged_variable * #P'('))
+lex:add_rule('function', lex:tag(lexer.FUNCTION, variable * #P'('))
 
 -- Match some more code mode aspects if they seem like they are situationally in a expression
 local ws = lexer.space^1
-lex:add_rule('let_bind', lex:tag(lexer.KEYWORD, P'let' * #(' ' * tagged_variable * P' =')))
+local var_or_string = P'"'^-1 * (variable + lexer.number) * P'"'^-1
+local variable = lex:tag(lexer.VARIABLE, lexer.word_utf8 * (S'-.'^-1 * lexer.word_utf8)^0)
+lex:add_rule('let_bind', lex:tag(lexer.KEYWORD, P'let' * #(' ' * variable * P' =')))
 lex:add_rule('else_if', lex:tag(lexer.KEYWORD, (P'else' * ws * P'if'^-1) - (-lpeg.B(S']}' * ' ') * P'else')))
 lex:add_rule('if', lex:tag(lexer.KEYWORD, P'if' * #(ws * ((var_or_string + operators^2) * ws)^0 * S'[{')))
 lex:add_rule('for', lex:tag(lexer.KEYWORD, P'for' * #(ws * var_or_string * ws * P'in' * #(ws * var_or_string * ws * S'[{'))))
 lex:add_rule('in', lex:tag(lexer.KEYWORD, P'in' * #(ws * var_or_string * ws * S'[{')))
 lex:add_rule('while', lex:tag(lexer.KEYWORD, P'while' * #(ws * ((var_or_string + operators^2) * ws)^0 * S'[{')))
-lex:add_rule('variable', lex:tag(lexer.VARIABLE, lpeg.B'#' * tagged_variable))
+lex:add_rule('variable', lex:tag(lexer.VARIABLE, lpeg.B'#' * variable))
 lex:add_rule('string', lex:tag(lexer.STRING, lexer.range('"') * #((S':,)') + (ws * S'[{'))))
-
 lex:add_rule('numbers', lex:tag(lexer.NUMBER, (lpeg.B(P', ' + P': ' + (S'-+*/=!<>{' * P' ')) + lpeg.B('(')) * lexer.number * lex:word_match('units')^-1) * #S',)')
 
 -- Labels
