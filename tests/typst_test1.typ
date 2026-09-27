@@ -23,7 +23,7 @@ are also available */
 == Subheading
 A link is like so: https://typst.app/
 
-Typst has *strong* and _emphasis_.
+Typst has *strong* and _emphasis_. else if it does not
 A paragraph may use #variable to access a code mode variable in a sentence.
 
 Lists can start with + or - depending on if they're numbered or bulleted:
@@ -57,6 +57,8 @@ $ pi F_n = round(1 / sqrt(5) phi.alt^n), quad phi.alt = (1 + sqrt(5)) / 2 $
     n = (n * 2) - 1
     (n,)
 }
+
+
 
 // Markup can be passed as content into code mode via []
 #link("https://typst.app")[== Linked Subheading]
