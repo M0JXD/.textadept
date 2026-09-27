@@ -1,15 +1,19 @@
-// Example Typst document
+// Testing Typst document
+
+// Set rules and variable usage:
 #set page(width: 10cm, height: auto)
 #set heading(numbering: "1.")
 #let variable = [_\# syntax_]
-#variable = (10 + 2 + 4)
 
+// If/else clauses
 #if 1 < 2 {
     variable
 } else if 3 < 2 [
-    This is not.
+    This is not shown.
+    *Not even this bit in bold*
 ] else {
-    variable * 2
+    let newvar = 10
+    newvar * 2
 } <label>
 
 // A comment is always of this form no matter the "mode"
@@ -17,12 +21,20 @@
 /* Multiline style comments
 are also available */
 
-= Main Heading
+= Top Level Heading
 
-== Subheading
+Raw text for Python below:
+I have a string "asdf".
+
+```python
+def func()
+    print("Hello!")
+```
+
+== Second Level Heading
 A link is like so: https://typst.app/
 
-Typst has *strong* and _emphasis_.
+Typst has *strong* and _emphasis_. else if it does not
 A paragraph may use #variable to access a code mode variable in a sentence.
 
 Lists can start with + or - depending on if they're numbered or bulleted:
@@ -57,15 +69,31 @@ $ pi F_n = round(1 / sqrt(5) phi.alt^n), quad phi.alt = (1 + sqrt(5)) / 2 $
     (n,)
 }
 
-// Markup can be passed as content into code mode via []
-#link("https://typst.app")[== Linked Subheading]
 
+
+// Markup can be passed as content into code mode via []
+#link("https://typst.app")[
+== Linked Subheading
+]
+
+// Longer expressions can be like so
 #{
     let a = 1
     let b = 2
-    // Sadly comments in expressions are also caputured.
+    // Sadly sometimes comments in expressions are also caputured.
     (a, b) = (b, a)
     [a = #a, b = #b]
+    for c in "STR" {
+
+    }
+
+    if 2 < 3 {
+
+    }
+
+    while false {
+        variable
+    }
 }
 
 ==== Random Heading
@@ -82,3 +110,6 @@ $ pi F_n = round(1 / sqrt(5) phi.alt^n), quad phi.alt = (1 + sqrt(5)) / 2 $
     *Glaciers form an important part of the earth's climate system.*
 ]
 
+My new lexer can sometimes incorrectly highlight keywords, e.g.
+
+The protagonist (for whom in their [or so they thought] dream) discovered their true purpose.
