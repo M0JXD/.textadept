@@ -39,32 +39,32 @@ lex:add_rule('em', lex:tag(lexer.ITALIC, lexer.range('_')))
 
 -- Code Expressions
 -- Using rules from: https://typst.app/docs/reference/syntax/#code
+local ws = lexer.space^0
 local operators = lex:tag(lexer.OPERATOR, S'-+*/=!<>'^-2 + P'not' + P'in' + P'and' + P'or')
 local paren = lexer.range('(', ')', false, false, true)
 local embed_paren = lex:tag(lexer.EMBEDDED, paren)
 local code_block = lexer.range('{', '}', false, false, true)
 local content = lexer.range('[', ']', false, false, true)
 local code_content = #(code_block + content)
-local capture_code_content = lex:tag(lexer.EMBEDDED, code_block) + lex:tag(lexer.STRING, content)
+local capture_code_content = lex:tag(lexer.EMBEDDED, code_block) + lex:tag(lexer.DEFAULT, content)
 local func = lex:tag(lexer.FUNCTION, variable) * paren
-local capture_func = lex:tag(lexer.FUNCTION, variable) * paren
 local assignables = lex:tag(lexer.STRING, lexer.range('"')) + func + lex:tag(lexer.NUMBER, lexer.number) + embed_paren + variable + code_content
-local assignment = variable * ' ' *  lex:tag(lexer.OPERATOR, P'=') * ' ' * assignables * (' ' * (operators * ' ' * assignables))^0
+local assignment = variable * ws *  lex:tag(lexer.OPERATOR, P'=') * ws * assignables * (' ' * (operators * ws * assignables))^0
 local let_kw = lex:tag(lexer.KEYWORD, P'let')
-local let_bind = let_kw * ' ' * variable * ' ' *  lex:tag(lexer.OPERATOR, P'=') * ' ' *
-	('(' + assignables * (' ' * (operators * ' ' * assignables))^0)
-local named_func = let_kw * ' ' * capture_func * ' ' *  lex:tag(lexer.OPERATOR, P'=') * ' ' * (embed_paren + code_block + lexer.to_eol())
-local conditional_if = lex:tag(lexer.KEYWORD, P'if') * ' ' * assignables * (' ' * (operators * ' ' * assignables))^0 * ' ' *
+local let_bind = let_kw * ws * variable * ws *  lex:tag(lexer.OPERATOR, P'=') * ws *
+	('(' + assignables * (' ' * (operators * ws * assignables))^0)
+local named_func = let_kw * ws * func * ws *  lex:tag(lexer.OPERATOR, P'=') * ws * (embed_paren + code_block + lexer.to_eol())
+local conditional_if = lex:tag(lexer.KEYWORD, P'if') * ws * assignables * (' ' * (operators * ws * assignables))^0 * ws *
 	capture_code_content
 local else_kw = lex:tag(lexer.KEYWORD, P'else')
-local conditional = conditional_if * (' ' * else_kw * ' ' * conditional_if * ((' ' * else_kw * ' ')^-1) + capture_code_content^1)^0
-local for_loop = lex:tag(lexer.KEYWORD, P'for') * ' ' * variable * ' ' * lex:tag(lexer.KEYWORD, P'in') * ' ' * assignables * ' ' * code_content
-local while_loop = lex:tag(lexer.KEYWORD, P'while') * ' ' * variable * ' ' * operators * ' ' * assignables * ' ' * code_content
-local set_rule = lex:tag(lexer.KEYWORD, P'set') * ' ' * func
+local conditional = conditional_if * (' ' * else_kw * ws * conditional_if * ((' ' * else_kw * ' ')^-1) + capture_code_content^1)^0
+local for_loop = lex:tag(lexer.KEYWORD, P'for') * ws * variable * ws * lex:tag(lexer.KEYWORD, P'in') * ws * assignables * ws * code_content
+local while_loop = lex:tag(lexer.KEYWORD, P'while') * ws * variable * ws * operators * ws * assignables * ws * code_content
+local set_rule = lex:tag(lexer.KEYWORD, P'set') * ws * func
 local set_if = set_rule * conditional
 local show = lex:tag(lexer.KEYWORD, P'show') * (': ' + (' ' * variable)) * S': '^-2 * (func + set_rule + variable)
-local include = lex:tag(lexer.KEYWORD, P'include') * ' ' * lexer.range('"')
-local import = lex:tag(lexer.KEYWORD, P'import') * ' ' * lexer.range('"') * (P': ' + (' ' * lex:tag(lexer.KEYWORD, P'as') * ' ') * lexer.to_eol())^-1
+local include = lex:tag(lexer.KEYWORD, P'include') * ws * lexer.range('"')
+local import = lex:tag(lexer.KEYWORD, P'import') * ws * lexer.range('"') * (P': ' + (' ' * lex:tag(lexer.KEYWORD, P'as') * ' ') * lexer.to_eol())^-1
 
 local expression = '#' *
 	(for_loop + while_loop + include + import + show + conditional + set_if + set_rule + let_bind +
