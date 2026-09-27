@@ -42,7 +42,8 @@ lex:add_rule('em', lex:tag(lexer.ITALIC, lexer.range('_')))
 -- Using rules from: https://typst.app/docs/reference/syntax/#code
 local variable = lexer.word_utf8 * (S'-.'^-1 * lexer.word_utf8)^0
 local ws = lexer.space^1
-lex:add_rule('keyword', lex:tag(lexer.KEYWORD, '#' * lex:word_match(lexer.KEYWORD)))
+lex:add_rule('code_start', lex:tag(lexer.EMBEDDED, P'#' - lpeg.B('\\') * P'#'))
+lex:add_rule('keyword', lex:tag(lexer.KEYWORD, lpeg.B'#' * lex:word_match(lexer.KEYWORD)))
 
 local operators = S'-+*/=!<>' + P'not' + P'in' + P'and' + P'or'
 local tagged_variable = lex:tag(lexer.VARIABLE, variable)
