@@ -31,7 +31,7 @@ end)
 lex:add_rule('raw', lex:tag(lexer.CODE, raw_text))
 
 -- References
-local variable = lex:tag(lexer.VARIABLE, lexer.word_utf8 * (S'-.'^-1 * lexer.word_utf8)^0)
+local variable = lex:tag(lexer.VARIABLE, lexer.word_utf8 * (S'-.:'^-1 * lexer.word_utf8)^0)
 lex:add_rule('reference', lex:tag(lexer.REFERENCE, '@' * variable))
 
 -- Strong and Emphasis
@@ -47,9 +47,12 @@ lex:set_word_list(lexer.KEYWORD, {
 	'let', 'set', 'show', 'while', 'for', 'if', 'include', 'import'
 })
 
+local operators = S'-+*/=!<>' + P'not' + P'in' + P'and' + P'or'
 lex:add_rule('function', lex:tag(lexer.FUNCTION, variable * #P'('))
 lex:add_rule('else_if', lex:tag(lexer.KEYWORD, (P'else' * P' if'^-1) - (-lpeg.B(S']}' * ' ') * P'else')))
-lex:add_rule('in', lex:tag(lexer.KEYWORD, #(P'for ' * variable * P' in') * P'in'))
+lex:add_rule('in', lex:tag(lexer.KEYWORD, P'in' * #(' ' * P'"'^-1 * (variable + lexer.number) * P'"'^-1 * ' ' * S'[{')))
+lex:add_rule('let_bind', lex:tag(lexer.KEYWORD, P'let' * #(' ' * variable * P' =')))
+lex:add_rule('if', lex:tag(lexer.KEYWORD, P'if' * #(' ' * variable * ' ' * operators)))
 
 -- Labels
 lex:add_rule('label',
