@@ -7,7 +7,6 @@
 #set math.equation(numbering: "(1)")
 #show link: underline
 
-
 #align(center, text(17pt)[
   *Euler-Lagrange Equation*
 ])
@@ -18,7 +17,7 @@
 
 Euler-Lagrange equation is defined as below.
 
-$ (diff cal(L)) / (diff q_i) - d / (d t) (diff cal(L)) / (diff dot(q_i)) = 0  $ <euler>
+$ (partial cal(L)) / (partial q_i) - d / (d t) (partial cal(L)) / (partial dot(q_i)) = 0  $ <euler>
 
 where $L$ is Lagrangean, $q_i$ generalized coordinate,
 $dot(q)_i$ generalized velocity (generalized coordinate derived w.r.t time).
@@ -79,29 +78,29 @@ $ f(x_i, (x_i - x_(i - 1)) / epsilon). $
 Now, what happens to $f$ when we change the value of $i$th value $x_i$?
 First, let's write down $f$'s partial derivative at $i$th sample $f_i$ w.r.t. $x_i$,
 
-$ diff / (diff x_i) &= diff / (diff x_i) f (x_i, (x_i - x_(i - 1)) / epsilon) \
-&= (diff f_i) / (diff x_i) + (diff v_i) / (diff x_i) (diff f_i) / (diff v_i) \
-&= (diff f_i) / (diff x_i) + 1 / epsilon (diff f_i) / (diff v_i)
+$ partial / (partial x_i) &= partial / (partial x_i) f (x_i, (x_i - x_(i - 1)) / epsilon) \
+&= (partial f_i) / (partial x_i) + (partial v_i) / (partial x_i) (partial f_i) / (partial v_i) \
+&= (partial f_i) / (partial x_i) + 1 / epsilon (partial f_i) / (partial v_i)
 $
 where I defined $v_i equiv (x_i - x_(i-1)) / epsilon$ for brevity.
 
-We also need to consider the contribution from $f_i + 1$ to calculate total effect on $(diff f) / (diff x_i)$.
+We also need to consider the contribution from $f_i + 1$ to calculate total effect on $(partial f) / (partial x_i)$.
 
-$ diff / (diff x_i) f_(i+1) &= diff / (diff x_i) f(x_(i+1), (x_(i+1) - x_i) / epsilon) \
-&= (diff v_(i + 1)) / (diff x_i) (diff f_(i + 1)) / (diff v_(i + 1)) \
-&= - 1 / epsilon (diff f_(i + 1)) / (diff v_(i + 1))
+$ partial / (partial x_i) f_(i+1) &= partial / (partial x_i) f(x_(i+1), (x_(i+1) - x_i) / epsilon) \
+&= (partial v_(i + 1)) / (partial x_i) (partial f_(i + 1)) / (partial v_(i + 1)) \
+&= - 1 / epsilon (partial f_(i + 1)) / (partial v_(i + 1))
 $
 
 Therefore, the net change is
 
-$ (diff f_i) / (diff x_i) + 1 / epsilon (diff f_i) / (diff v_i) - 1 / epsilon (diff f_(i + 1)) / (diff v_(i + 1)). $
+$ (partial f_i) / (partial x_i) + 1 / epsilon (partial f_i) / (partial v_i) - 1 / epsilon (partial f_(i + 1)) / (partial v_(i + 1)). $
 
 Now, $(f_(i + 1) - f_i) / epsilon$ is nothing but derivative in the limit of $epsilon -> 0$.
 Also, $v_i$ becomes the derivative of position w.r.t. time, that is, velocity.
 
 Taking the limit yields
 
-$ (diff f_i) / (diff x_i) - d / (d t) (diff f_i) / (diff dot(x)_i) = 0. $
+$ (partial f_i) / (partial x_i) - d / (d t) (partial f_i) / (partial dot(x)_i) = 0. $
 
 At the limit of continuous function, the subscript $i$ disappears and the variable t
  becomes continuous variable instead, which yields the Euler-Lagrange @euler.
@@ -140,7 +139,7 @@ The force exerted from this term is called Coriolis force.
 
 Let's derive Euler-Lagrange equation along $X$ component.
 
-$ (diff cal(L)) / (diff X) - d / (d t) (diff cal(L)) / (diff dot(X)) =
+$ (partial cal(L)) / (partial X) - d / (d t) (partial cal(L)) / (partial dot(X)) =
 omega^2 m X + (omega m) / 2 dot(Y) - m dot.double(X) + (omega m) / 2 dot(Y) = 0 \
 therefore m dot.double(X) = omega^2 m X + omega m dot(Y)
 $
@@ -170,7 +169,7 @@ $
 
 Now, from the Euler-Lagrangean equation along $r$ axis,
 
-$ (diff cal(L)) / (diff r) - d / (d t) (diff cal(L)) / (diff dot(r)) &= m r dot(theta)^2 - d / (d t) m dot(r) \
+$ (partial cal(L)) / (partial r) - d / (d t) (partial cal(L)) / (partial dot(r)) &= m r dot(theta)^2 - d / (d t) m dot(r) \
 &= m r dot(theta)^2 - m dot.double(r) = 0 \
 therefore m r dot(theta)^2 &= m dot.double(r).
 $
@@ -180,7 +179,7 @@ which is centrifugal force.
 
 Also, from Euler-Lagrange equation along $theta$,
 
-$ (diff cal(L)) / (diff theta) - d / (d t) (diff cal(L)) / (diff dot(theta)) = - m r^2 dot(theta) = 0. $
+$ (partial cal(L)) / (partial theta) - d / (d t) (partial cal(L)) / (partial dot(theta)) = - m r^2 dot(theta) = 0. $
 
 This is law of angular momentum conservation.
 
@@ -190,7 +189,7 @@ The law of angular momentum conservation that we derived above is an ad-hoc solu
 
 First, from the variational principle, we can write that
 
-$ delta f(arrow(q)) = sum_i (diff f) / (diff q_i) delta q_i $
+$ delta f(arrow(q)) = sum_i (partial f) / (partial q_i) delta q_i $
 
 where $f(arrow(q))$ is a function depending all of $q_i (i=1,2,…,n)$.
 This is the same expression as the total differentiation.
@@ -208,18 +207,18 @@ The equation means the variation can be approximated within $delta$.
 Lagrangean is a function of generalized coordinates $q_i$ and generalized velocities $dot(q)_i$,
 so it variation can be written as
 
-$ delta cal(L)(arrow(q), arrow(dot(q))) = sum_i ((diff cal(L)) / (diff q_i) delta q_i + (diff cal(L)) / (diff dot(q)_i) delta dot(q)_i). $ <general>
+$ delta cal(L)(arrow(q), arrow(dot(q))) = sum_i ((partial cal(L)) / (partial q_i) delta q_i + (partial cal(L)) / (partial dot(q)_i) delta dot(q)_i). $ <general>
 
 Now, we have derived that if Lagrangean satisfies Euler-Lagrange equation, i.e. satisfies laws of motion, we can say @euler.
 For brevity, we introduce a symbol
 
-$ (diff cal(L)) / (diff dot(q)_i) equiv p_i. $ <Lqdotp>
+$ (partial cal(L)) / (partial dot(q)_i) equiv p_i. $ <Lqdotp>
 
 which is synonymous to momentum in classical mechanics, but it can represent more abstract quantity in quantum mechanics.
 
 With this we can rewrite Euler-Lagrange equation as
 
-$ (diff cal(L)) / (diff q_i) = dot(p)_i. $ <Lqpdot>
+$ (partial cal(L)) / (partial q_i) = dot(p)_i. $ <Lqpdot>
 
 We can use this to rewrite @general as
 
@@ -261,7 +260,7 @@ We can also express this as $cal(L)(arrow(q), arrow(dot(q)))$.
 
 Now, let's write derivative of Lagrangean w.r.t. time.
 
-$ (d cal(L)(arrow(q), arrow(dot(q)))) / (d t) = sum_i { (diff cal(L)) / (diff q_i) dot(q)_i + (diff cal(L)) / (diff dot(q)_i) dot.double(q)_i }. $
+$ (d cal(L)(arrow(q), arrow(dot(q)))) / (d t) = sum_i { (partial cal(L)) / (partial q_i) dot(q)_i + (partial cal(L)) / (partial dot(q)_i) dot.double(q)_i }. $
 
 Here we can use @Lqdotp and @Lqpdot to reduce it to
 
@@ -298,8 +297,8 @@ In quantum mechanics, we cannot write down Hamiltonian this easily as the sum of
 Now what will happen if there is no time translational symmetry.
 We can repeat the argument from (8) through (9) with the condition that $cal(L)$ has explicit time dependence $cal(L)(arrow(q), arrow(dot(q)), t)$, which yields
 
-$ (d cal(L)) / (d t) &= sum_i d / (d t) p_i dot(q)_i + (diff cal(L)) / (diff t) \
-(d cal(H)) / (d t) &= - (diff cal(L)) / (diff t).
+$ (d cal(L)) / (d t) &= sum_i d / (d t) p_i dot(q)_i + (partial cal(L)) / (partial t) \
+(d cal(H)) / (d t) &= - (partial cal(L)) / (partial t).
 $
 
 Why we get a negative sign in this equation is the matter of definition. No matter how its sign is defined, the fact that Hamiltonian is conserved won't change.
@@ -308,16 +307,16 @@ Why we get a negative sign in this equation is the matter of definition. No matt
 
 Let's obtain total differentiation of Hamiltonian.
 
-$ d cal(H) = sum_i [ dot(q)_i d p_i + p_i d dot(q) - (diff cal(L)) / (diff dot(q)_i) d dot(q)_i - (diff cal(L)) / (diff q_i) d q_i] $
+$ d cal(H) = sum_i [ dot(q)_i d p_i + p_i d dot(q) - (partial cal(L)) / (partial dot(q)_i) d dot(q)_i - (partial cal(L)) / (partial q_i) d q_i] $
 
-Now, we can use $(diff cal(L)) / (diff dot(q)_i) = p_i$, $(diff cal(L)) / (diff p_i) = dot(q)_i$ to simplify it to
+Now, we can use $(partial cal(L)) / (partial dot(q)_i) = p_i$, $(partial cal(L)) / (partial p_i) = dot(q)_i$ to simplify it to
 
 $ d cal(H) = sum_i (dot(q)_i d p_i - dot(p)_i d q_i) $
 
 We can apply partial derivative to each of $p_i$ and $q_i$ to the Hamiltonian to obtain
 
-$ (diff cal(H)) / (diff p_i) &= dot(q)_i \
- (diff cal(H)) / (diff q_i) &= - dot(p)_i $
+$ (partial cal(H)) / (partial p_i) &= dot(q)_i \
+ (partial cal(H)) / (partial q_i) &= - dot(p)_i $
 
 These are Hamilton's equations.
 
