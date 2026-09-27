@@ -8,6 +8,7 @@
     variable
 } else if 3 < 2 [
     This is not.
+    *In italics*
 ] else {
     variable * 2
 } <label>
