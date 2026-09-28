@@ -58,7 +58,7 @@ lex:add_rule('else_if',
 	lex:tag(lexer.KEYWORD, (P'else' * ws * P'if'^-1) - (-lpeg.B(S']}' * ' ') * P'else')))
 
 lex:add_rule('if', lex:tag(lexer.KEYWORD,
-	P'if' * #(ws * ((((assignable + operators^-2) * ws)^0 * S'[{') + func))))
+	P'if' * #(ws * ((((assignable + operators^-2) * ws)^0 * S'[{') + func + ('(' * variable * ws* operators)))))
 
 lex:add_rule('set', lex:tag(lexer.KEYWORD, P'set' * #(ws * func)))
 
