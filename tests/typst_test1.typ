@@ -45,6 +45,7 @@ Lists can start with + or - depending on if they're numbered or bulleted:
 + Numbered Item 1
 + Numbered Item 2
 
+I can't let anyone use this y'know! What if else they found out!
 Example inline mathematics look like $F_n = F_n(n-1) + pi + F_(n-2)$.
 Mathematics that are not inline occur like so:
 
