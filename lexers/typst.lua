@@ -76,8 +76,8 @@ lex:add_rule('variable', lex:tag(lexer.VARIABLE, lpeg.B'#' * variable))
 lex:add_rule('string', lex:tag(lexer.STRING, lexer.range('"') * #((S'\n:,)') + (ws * S'[{'))))
 
 lex:add_rule('numeric', lex:tag(lexer.NUMBER,
-	(lpeg.B(P', ' + P': ' + (S'-+*/=!<>{' * P' ')) + lpeg.B('(')) * lexer.number *
-		lex:word_match('units')^-1) * #S',)')
+	(lpeg.B(S'-+*/=!<>{,:' * P' ') + lpeg.B('(')) * lexer.number *
+		lex:word_match('units')^-1) * #(S',)' * S(', \n')))
 
 -- Labels
 lex:add_rule('label',
@@ -125,14 +125,7 @@ lex:set_word_list(lexer.KEYWORD, {
 
 -- Unit types
 lex:set_word_list('units', {
-	-- Fractions
-	'fr',
-	-- Length
-	'pt', 'mm', 'cm', 'in', 'em',
-	-- Angles
-	'deg', 'rad',
-	-- Ratio
-	'%'
+	'fr', 'pt', 'mm', 'cm', 'in', 'em', 'deg', 'rad', '%'
 })
 
 lexer.property['scintillua.comment'] = '//'
