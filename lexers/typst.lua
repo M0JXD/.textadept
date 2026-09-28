@@ -56,7 +56,8 @@ lex:add_rule('let_bind', lex:tag(lexer.KEYWORD, P'let' * #(' ' * variable * P' =
 lex:add_rule('else_if',
 	lex:tag(lexer.KEYWORD, (P'else' * ws * P'if'^-1) - (-lpeg.B(S']}' * ' ') * P'else')))
 
-lex:add_rule('if', lex:tag(lexer.KEYWORD, P'if' * #(ws * ((((assignable + operators^-2) * ws)^0 * S'[{') + func))))
+lex:add_rule('if', lex:tag(lexer.KEYWORD,
+	P'if' * #(ws * ((((assignable + operators^-2) * ws)^0 * S'[{') + func))))
 
 lex:add_rule('set', lex:tag(lexer.KEYWORD, P'set' * #(ws * func)))
 
@@ -67,8 +68,8 @@ lex:add_rule('for', lex:tag(lexer.KEYWORD, P'for' *
 
 lex:add_rule('in', lex:tag(lexer.KEYWORD, P'in' * #(ws * assignable * ws * S'[{')))
 
-lex:add_rule('while', lex:tag(lexer.KEYWORD,
-	P'while' * #(ws * ((assignable + operators^2) * ws)^0 * S'[{')))
+lex:add_rule('while',
+	lex:tag(lexer.KEYWORD, P'while' * #(ws * ((assignable + operators^2) * ws)^0 * S'[{')))
 
 lex:add_rule('variable', lex:tag(lexer.VARIABLE, lpeg.B'#' * variable))
 
