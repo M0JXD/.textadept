@@ -77,7 +77,7 @@ lex:add_rule('variable', lex:tag(lexer.VARIABLE, lpeg.B'#' * variable))
 lex:add_rule('string', lex:tag(lexer.STRING, lexer.range('"') * #((S'\n:,)') + (ws * S'[{'))))
 
 lex:add_rule('numeric', lex:tag(lexer.NUMBER,
-	(lpeg.B(S'-+*/=!<>{,:' * P' ') + lpeg.B('(')) * lexer.number *
+	(lpeg.B(S'-+*/=!<>{(,: ' * P' ') + lpeg.B('(')) * lexer.number *
 		lex:word_match('units')^-1) * #(S',)' * S(', \n')))
 
 -- Labels
