@@ -78,7 +78,7 @@ function M.pandoc(type)
 			-- TODO: Apply some default CSS for tables?
 			-- pandoc_str = pandoc_str
 		elseif type == 'pdf' then
-			pandoc_str = pandoc_str .. '-V geometry:margin=1.5cm'
+			pandoc_str = pandoc_str .. '--pdf-engine=typst -V mainfont="Times New Roman"'
 		elseif type == 'odt' then
 			pandoc_str = pandoc_str .. '--reference-doc ' .. _USERHOME ..
 				(OS == 'windows' and '\\modules\\export_ext\\reference.odt' or
