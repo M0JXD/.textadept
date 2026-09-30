@@ -97,7 +97,7 @@ function M.pandoc(type)
 		if type == 'html' then
 			pandoc_str = pandoc_str .. '--standalone --embed-resources=true --css=' .. M.css
 		elseif type == 'pdf' then
-			pandoc_str = pandoc_str .. '--pdf-engine=' .. M.pdf_engine .. ' --defaults ' .. module_path .. M.pdf_defaults
+			pandoc_str = pandoc_str .. '--pdf-engine=' .. M.pdf_engine .. ' --defaults ' .. M.pdf_defaults
 		elseif type == 'odt' then
 			pandoc_str = pandoc_str .. '--reference-doc ' .. M.odt_reference
 		end
