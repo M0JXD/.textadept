@@ -20,6 +20,8 @@
 -- @module export_ext
 local M = {}
 
+local module_path = _USERHOME .. (OS == 'windows' and '\\modules\\export_ext\\' or '/modules/export_ext/')
+
 --- Command used to open exported HTML files in the user's default web browser.
 M.browser = OS == 'windows' and 'start ""' or OS == 'macos' and 'open' or 'xdg-open'
 
@@ -78,11 +80,9 @@ function M.pandoc(type)
 			-- TODO: Apply some default CSS for tables?
 			-- pandoc_str = pandoc_str
 		elseif type == 'pdf' then
-			pandoc_str = pandoc_str .. '--pdf-engine=typst -V mainfont="Times New Roman"'
+			pandoc_str = pandoc_str .. '--pdf-engine=typst --defaults ' .. module_path .. 'pdf.yaml'
 		elseif type == 'odt' then
-			pandoc_str = pandoc_str .. '--reference-doc ' .. _USERHOME ..
-				(OS == 'windows' and '\\modules\\export_ext\\reference.odt' or
-					'/modules/export_ext/reference.odt')
+			pandoc_str = pandoc_str .. '--reference-doc ' .. module_path .. 'reference.odt'
 		end
 		pandoc_str = pandoc_str .. ' -s -o "' .. out_filename .. '" "' .. filename .. '"'
 		os.remove('"' .. out_filename .. '"')

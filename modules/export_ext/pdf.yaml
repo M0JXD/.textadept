@@ -1,0 +1,9 @@
+variables:
+  margin:
+    left: 1.4cm
+    right: 1.4cm
+    bottom: 1.4cm
+    top: 1.4cm
+    # x: 0cm
+    # y: 0cm
+  mainfont: Arial
