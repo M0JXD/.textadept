@@ -3,12 +3,8 @@
 
 --- Export Extensions for PDFs and Markdown
 --
--- This module extends the Export module's functionality by adding additional render options:
---
--- - Markdown to plain HTML.
--- - Calling pandoc to convert the current document to HTML, PDF or ODT.
---
--- For it to work right it must be added after the official Export module:
+-- This module extends the Export module's functionality by adding additional render options.
+-- For it to work right it should be added after the official Export module:
 --
 -- ```lua
 -- local export = require('export')
@@ -17,10 +13,32 @@
 --
 -- The additional options will be available under the "File > Export" menu.
 --
+-- Additonal render options are:
+--
+-- - Markdown to plain HTML.
+-- - Calling pandoc to convert the current document to HTML, PDF or ODT.
+--
+-- Pandoc's output has some defaults applied by the module, although you may pass your own options.
+--
 -- @module export_ext
 local M = {}
-
 local module_path = _USERHOME .. (OS == 'windows' and '\\modules\\export_ext\\' or '/modules/export_ext/')
+
+--- PDF engine to instruct Pandoc to use
+-- Default is `'typst'`
+M.pdf_engine = 'typst'
+
+--- Defaults file to instruct Pandoc to use with PDF output
+-- Defaults to the bundled *pdf.yaml*
+M.pdf_defaults = module_path .. 'pdf.yaml'
+
+--- Reference file to instruct Pandoc to use with ODT output
+-- Defaults to the bundled *reference.odt*
+M.odt_reference = module_path .. 'reference.odt'
+
+--- CSS file to instruct Pandoc to use with HTML output
+-- Defaults to the bundled *bundle.css*
+M.css = module_path .. 'bundle.css'
 
 --- Command used to open exported HTML files in the user's default web browser.
 M.browser = OS == 'windows' and 'start ""' or OS == 'macos' and 'open' or 'xdg-open'
@@ -77,12 +95,11 @@ function M.pandoc(type)
 
 		local pandoc_str = 'pandoc '
 		if type == 'html' then
-			-- TODO: Apply some default CSS for tables?
-			-- pandoc_str = pandoc_str
+			pandoc_str = pandoc_str .. '--standalone --embed-resources=true --css=' .. M.css
 		elseif type == 'pdf' then
-			pandoc_str = pandoc_str .. '--pdf-engine=typst --defaults ' .. module_path .. 'pdf.yaml'
+			pandoc_str = pandoc_str .. '--pdf-engine=' .. M.pdf_engine .. ' --defaults ' .. module_path .. M.pdf_defaults
 		elseif type == 'odt' then
-			pandoc_str = pandoc_str .. '--reference-doc ' .. module_path .. 'reference.odt'
+			pandoc_str = pandoc_str .. '--reference-doc ' .. M.odt_reference
 		end
 		pandoc_str = pandoc_str .. ' -s -o "' .. out_filename .. '" "' .. filename .. '"'
 		os.remove('"' .. out_filename .. '"')
