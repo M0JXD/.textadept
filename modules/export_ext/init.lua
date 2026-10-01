@@ -16,7 +16,7 @@
 -- Additonal render options are:
 --
 -- - Markdown to plain HTML.
--- - Calling pandoc to convert the current document to HTML, PDF or ODT.
+-- - Calling pandoc to convert the current document to DOCX, HTML, PDF or ODT.
 --
 -- Pandoc's output has some defaults applied by the module, although you may pass your own options.
 --
@@ -24,20 +24,20 @@
 local M = {}
 local module_path = _USERHOME .. (OS == 'windows' and '\\modules\\export_ext\\' or '/modules/export_ext/')
 
---- PDF engine to instruct Pandoc to use
+--- PDF engine to instruct Pandoc to use.
 -- Default is `'typst'`
 M.pdf_engine = 'typst'
 
---- Defaults file to instruct Pandoc to use with PDF output
--- Defaults to the bundled *pdf.yaml*
+--- Defaults file to instruct Pandoc to use with PDF output.
+-- Defaults to the bundled *pdf.yaml*.
 M.pdf_defaults = module_path .. 'pdf.yaml'
 
---- Reference file to instruct Pandoc to use with ODT output
--- Defaults to the bundled *reference.odt*
+--- Reference file to instruct Pandoc to use with ODT output.
+-- Defaults to the bundled *reference.odt*.
 M.odt_reference = module_path .. 'reference.odt'
 
---- CSS file to instruct Pandoc to use with HTML output
--- Defaults to the bundled *bundle.css*
+--- CSS file to instruct Pandoc to use with HTML output.
+-- Defaults to the bundled *bundle.css*.
 M.css = module_path .. 'bundle.css'
 
 --- Command used to open exported HTML files in the user's default web browser.
@@ -100,6 +100,8 @@ function M.pandoc(type)
 			pandoc_str = pandoc_str .. '--pdf-engine=' .. M.pdf_engine .. ' --defaults ' .. M.pdf_defaults
 		elseif type == 'odt' then
 			pandoc_str = pandoc_str .. '--reference-doc ' .. M.odt_reference
+		elseif type == 'docx' then
+			pandoc_str = pandoc_str
 		end
 		pandoc_str = pandoc_str .. ' -s -o "' .. out_filename .. '" "' .. filename .. '"'
 		os.remove('"' .. out_filename .. '"')
@@ -117,6 +119,7 @@ _L['Pandoc to ODT...'] = 'Pandoc to _ODT...'
 _L['Pandoc to PDF...'] = 'Pandoc to _PDF...'
 local m_export = textadept.menu.menubar['File/Export']
 table.insert(m_export, {_L['Convert Markdown to HTML...'], M.markdown_to_html})
+table.insert(m_export, {_L['Pandoc to DOCX...'], function() M.pandoc('docx') end})
 table.insert(m_export, {_L['Pandoc to HTML...'], function() M.pandoc('html') end})
 table.insert(m_export, {_L['Pandoc to ODT...'], function() M.pandoc('odt') end})
 table.insert(m_export, {_L['Pandoc to PDF...'], function() M.pandoc('pdf') end})

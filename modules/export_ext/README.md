@@ -14,7 +14,7 @@ The additional options will be available under the "File > Export" menu.
 Additonal render options are:
 
 - Markdown to plain HTML.
-- Calling pandoc to convert the current document to HTML, PDF or ODT.
+- Calling pandoc to convert the current document to DOCX, HTML, PDF or ODT.
 
 Pandoc's output has some defaults applied by the module, although you may pass your own options.
 
@@ -27,8 +27,9 @@ Command used to open exported HTML files in the user's default web browser.
 <a id="export_ext.css"></a>
 ## `export_ext.css`
 
-CSS file to instruct Pandoc to use with HTML output
-Defaults to the bundled *bundle.css*
+CSS file to instruct Pandoc to use with HTML output.
+
+Defaults to the bundled *bundle.css*.
 
 <a id="export_ext.markdown_to_html"></a>
 ## `export_ext.markdown_to_html`()
@@ -41,8 +42,9 @@ or falls back to a bundled Lua implementation if it does not exist.
 <a id="export_ext.odt_reference"></a>
 ## `export_ext.odt_reference`
 
-Reference file to instruct Pandoc to use with ODT output
-Defaults to the bundled *reference.odt*
+Reference file to instruct Pandoc to use with ODT output.
+
+Defaults to the bundled *reference.odt*.
 
 <a id="export_ext.pandoc"></a>
 ## `export_ext.pandoc`(*type*)
@@ -55,11 +57,13 @@ Parameters:
 <a id="export_ext.pdf_defaults"></a>
 ## `export_ext.pdf_defaults`
 
-Defaults file to instruct Pandoc to use with PDF output
-Defaults to the bundled *pdf.yaml*
+Defaults file to instruct Pandoc to use with PDF output.
+
+Defaults to the bundled *pdf.yaml*.
 
 <a id="export_ext.pdf_engine"></a>
 ## `export_ext.pdf_engine`
 
-PDF engine to instruct Pandoc to use
+PDF engine to instruct Pandoc to use.
+
 Default is `'typst'`
