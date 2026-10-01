@@ -1,7 +1,7 @@
 -- Copyright 2016-2026 Mitchell. See LICENSE.
 -- Copyright 2026 Jamie Drinkell. See LICENSE.
 
---- Export Extensions for PDFs and Markdown
+--- Export Extensions
 --
 -- This module extends the Export module's functionality by adding additional render options.
 -- For it to work right it should be added after the official Export module:

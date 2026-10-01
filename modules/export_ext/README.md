@@ -1,4 +1,4 @@
-# Export Extensions for PDFs and Markdown
+# Export Extensions
 
 This module extends the Export module's functionality by adding additional render options.
 
