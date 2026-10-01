@@ -4,7 +4,7 @@
 --- Export Extensions
 --
 -- This module extends the Export module's functionality by adding additional render options via Pandoc.
--- For it to work right it should be added after the official Export module:
+-- While it works standalone, it should be added after the official Export module if used with it:
 --
 -- ```lua
 -- local export = require('export')
@@ -129,6 +129,14 @@ function M.pandoc(type)
 		os.execute(pandoc_str)
 		os.execute(M.browser .. ' "' .. out_filename .. '"')
 	end
+end
+
+-- Check Export exists and add if not
+_L['Export'] = 'E_xport'
+if not textadept.menu.menubar['File/Export'] then
+	local m_file = textadept.menu.menubar['File']
+	table.insert(m_file, #m_file - 1, {''}) -- separator
+	table.insert(m_file, #m_file - 1, {title = _L['Export']})
 end
 
 -- Add to Export sub-menu.

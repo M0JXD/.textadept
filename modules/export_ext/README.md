@@ -2,7 +2,7 @@
 
 This module extends the Export module's functionality by adding additional render options via Pandoc.
 
-For it to work right it should be added after the official Export module:
+While it works standalone, it should be added after the official Export module if used with it:
 
 ```lua
 local export = require('export')
