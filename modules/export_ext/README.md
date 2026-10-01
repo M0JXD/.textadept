@@ -1,6 +1,6 @@
 # Export Extensions
 
-This module extends the Export module's functionality by adding additional render options.
+This module extends the Export module's functionality by adding additional render options via Pandoc.
 
 For it to work right it should be added after the official Export module:
 
@@ -10,13 +10,10 @@ require('export_ext')
 ```
 
 The additional options will be available under the "File > Export" menu.
-
-Additonal render options are:
-
-- Markdown to plain HTML.
-- Calling pandoc to convert the current document to DOCX, HTML, PDF or ODT.
-
 Pandoc's output has some defaults applied by the module, although you may pass your own options.
+
+This module also has a Markdown compiler. If you try to compile Markdown and it fails,
+it will try to take over for you with the bundled implementation.
 
 
 <a id="export_ext.browser"></a>
@@ -34,10 +31,10 @@ Defaults to the bundled *bundle.css*.
 <a id="export_ext.markdown_to_html"></a>
 ## `export_ext.markdown_to_html`()
 
-Converts Markdown to HTML.
+Converts Markdown to HTML using the bundled Lua implementation.
 
-Checks for a installed in `markdown` command (e.g. the perl version or discount)
-or falls back to a bundled Lua implementation if it does not exist.
+Textadept comes with a Markdown compile command, this exists for emergency environments
+where there's no Markdown compiler. Will open in Browser after use.
 
 <a id="export_ext.odt_reference"></a>
 ## `export_ext.odt_reference`

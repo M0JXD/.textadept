@@ -41,7 +41,7 @@ M.css = module_path .. 'bundle.css'
 --- Command used to open exported HTML files in the user's default web browser.
 M.browser = OS == 'windows' and 'start ""' or OS == 'macos' and 'open' or 'xdg-open'
 
---- Checks if the current buffer is a Markdown or LaTeX document.
+--- Checks if the buffer is a Markdown or LaTeX document.
 local function check(buffer, type)
 	if not (buffer:get_lexer() == 'markdown' or buffer:get_lexer() == 'latex') then
 		ui.statusbar_text = "Can't convert " .. buffer:get_lexer() .. ' to ' .. type .. '!'
@@ -65,8 +65,7 @@ local function markdown_to_html(buffer)
 	end
 end
 
---- Converts Markdown to HTML.
--- Uses the bundled Lua implementation.
+--- Converts Markdown to HTML using the bundled Lua implementation.
 -- Textadept comes with a Markdown compile command, this exists for emergency environments
 -- where there's no Markdown compiler. Will open in Browser after use.
 function M.markdown_to_html()
