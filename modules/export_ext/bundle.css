@@ -10,11 +10,11 @@ html {
 }
 body {
   margin: 0 auto;
-  max-width: 36em;
-  padding-left: 50px;
-  padding-right: 50px;
-  padding-top: 50px;
-  padding-bottom: 50px;
+  max-width: 65em;
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-top: 20px;
+  padding-bottom: 20px;
   hyphens: auto;
   overflow-wrap: break-word;
   text-rendering: optimizeLegibility;
