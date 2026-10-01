@@ -6,6 +6,7 @@ theme_mgr.theme.light = 'ayu-light'
 theme_mgr.theme.dark = 'ayu-dark'
 theme_mgr.theme.term = 'ayu-evolve'
 theme_mgr.theme.markdown = {'catppuccin-latte', 'ayu-dark'}
+theme_mgr.theme.typ = {'catppuccin-latte', 'ayu-dark'}
 -- theme_mgr.font.family = 'FreeMono'
 
 -- Modules (Official)
