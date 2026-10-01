@@ -6,7 +6,7 @@ There is:
 - My *init.lua*.
 - Various utility modules.
 - Ayu, Catppuccin and Xed themes.
-- WIP Lexers for GTK Blueprint and Asciidoc.
+- WIP Lexers for GTK Blueprint, Typst and Asciidoc.
 - Scripts to generate module documentation and run system integration steps.
 
 ## Modules
