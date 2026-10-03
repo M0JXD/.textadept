@@ -18,7 +18,7 @@ All of the modules have LDoc comments, which work well with Textadept's LSP modu
 | Buffer Statusbar Utilities  | String manipulation utilities to make adjusting the Buffer Statusbar easier.            |
 | Distraction Free            | Updated Distraction Free Mode with additional features and terminal support.            |
 | Document Statistics         | Provides details about the buffer such as word count, selected lines et cetera.         |
-| Export Extensions           | Extends the official export module to convert Markdown and LaTeX to PDF and HTML.       |
+| Export Extensions           | Extends the official export module to convert markup languages via Pandoc.              |
 | Quick Open                  | Based on "Open Terminal Here", adding options to open File Browser and TUI Git Clients. |
 | Theme Manager               | Set up switched and per lexer themes, and detects missing features (e.g. fonts).        |
 
