@@ -15,7 +15,7 @@
 -- Pandoc's output has some defaults applied by the module, although you may pass your own options.
 --
 -- This module also has a Markdown compiler. If you try to compile Markdown and it fails,
--- it will try to take over for you with the bundled implementation.
+-- it will try to take over for you with the bundled Lua implementation.
 --
 -- @module export_ext
 local M = {}
@@ -34,17 +34,19 @@ M.pdf_defaults = module_path .. 'pdf.yaml'
 -- Defaults to the bundled *reference.odt*.
 M.odt_reference = module_path .. 'reference.odt'
 
---- CSS file to instruct Pandoc to use with HTML output.
+--- CSS file to instruct Pandoc to bundle with HTML output.
 -- Defaults to the bundled *bundle.css*.
 M.css = module_path .. 'bundle.css'
 
---- Command used to open exported HTML files in the user's default web browser.
+--- Command used to open exported files in the user's default application.
 M.browser = OS == 'windows' and 'start ""' or OS == 'macos' and 'open' or 'xdg-open'
 
---- Checks if the buffer is a Markdown or LaTeX document.
+--- Checks if the buffer is a Markup document that can be converted.
 local function check(buffer, type)
-	if not (buffer:get_lexer() == 'markdown' or buffer:get_lexer() == 'latex') then
-		ui.statusbar_text = "Can't convert " .. buffer:get_lexer() .. ' to ' .. type .. '!'
+	local lex = buffer:get_lexer()
+	if not (lex == 'markdown' or lex == 'latex' or lex == 'html' or lex == 'typst' or lex == 'rest' or
+		lex == 'asciidoc') then
+		ui.statusbar_text = "Can't convert " .. lex .. ' to ' .. type .. '!'
 		return false
 	end
 	return true
@@ -52,7 +54,7 @@ end
 
 --- Converts Markdown to HTML (internal version).
 local function markdown_to_html(buffer)
-	if check(buffer, 'HTML') then
+	if buffer:get_lexer() == 'markdown' then
 		-- Prompt the user for the HTML file to export to
 		local filename = buffer.filename or ''
 		local dir, name = filename:match('^(.-)[/\\]?([^/\\]-)%.?[^.]*$')
@@ -62,6 +64,8 @@ local function markdown_to_html(buffer)
 		if not out_filename then return end
 		htmlout = require('export_ext/markdown')(buffer:get_text())
 		io.open(out_filename, 'w'):write(htmlout):close()
+	else
+		ui.statusbar_text = 'Not a Markdown document!'
 	end
 end
 
@@ -101,11 +105,11 @@ events.connect(events.ERROR, function(text)
 	end
 end)
 
---- Calls pandoc to convert Markdown or LaTeX files.
--- @param type Type to document convert to, supports 'html', 'pdf' or 'odt'.
+--- Calls Pandoc to convert Markup files.
+-- @param type Type to document convert to, supports `'docx'`, `'html'`, `'odt'` or `'pdf'`.
 function M.pandoc(type)
 	if check(buffer, type:upper()) then
-		-- Prompt the user for the file to export to
+		-- Prompt the user for the file to export to.
 		local filename = buffer.filename or ''
 		local dir, name = filename:match('^(.-)[/\\]?([^/\\]-)%.?[^.]*$')
 		local out_filename = ui.dialogs.save{
@@ -114,24 +118,25 @@ function M.pandoc(type)
 		if not out_filename then return end
 
 		local pandoc_str = 'pandoc '
-		if type == 'html' then
+		if type == 'docx' then
+			pandoc_str = pandoc_str
+		elseif type == 'html' then
 			pandoc_str = pandoc_str .. '--standalone --embed-resources=true --css=' .. M.css
+		elseif type == 'odt' then
+			pandoc_str = pandoc_str .. '--reference-doc ' .. M.odt_reference
 		elseif type == 'pdf' then
 			pandoc_str = pandoc_str .. '--pdf-engine=' .. M.pdf_engine .. ' --defaults ' ..
 				M.pdf_defaults
-		elseif type == 'odt' then
-			pandoc_str = pandoc_str .. '--reference-doc ' .. M.odt_reference
-		elseif type == 'docx' then
-			pandoc_str = pandoc_str
 		end
 		pandoc_str = pandoc_str .. ' -s -o "' .. out_filename .. '" "' .. filename .. '"'
 		os.remove('"' .. out_filename .. '"')
 		os.execute(pandoc_str)
-		os.execute(M.browser .. ' "' .. out_filename .. '"')
+		os.execute(string.format('%s "%s"', M.browser, out_filename))
+
 	end
 end
 
--- Check Export exists and add if not
+-- Check Export exists and add if not.
 _L['Export'] = 'E_xport'
 if not textadept.menu.menubar['File/Export'] then
 	local m_file = textadept.menu.menubar['File']

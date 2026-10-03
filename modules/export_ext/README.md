@@ -13,18 +13,18 @@ The additional options will be available under the "File > Export" menu.
 Pandoc's output has some defaults applied by the module, although you may pass your own options.
 
 This module also has a Markdown compiler. If you try to compile Markdown and it fails,
-it will try to take over for you with the bundled implementation.
+it will try to take over for you with the bundled Lua implementation.
 
 
 <a id="export_ext.browser"></a>
 ## `export_ext.browser`
 
-Command used to open exported HTML files in the user's default web browser.
+Command used to open exported files in the user's default application.
 
 <a id="export_ext.css"></a>
 ## `export_ext.css`
 
-CSS file to instruct Pandoc to use with HTML output.
+CSS file to instruct Pandoc to bundle with HTML output.
 
 Defaults to the bundled *bundle.css*.
 
@@ -46,10 +46,10 @@ Defaults to the bundled *reference.odt*.
 <a id="export_ext.pandoc"></a>
 ## `export_ext.pandoc`(*type*)
 
-Calls pandoc to convert Markdown or LaTeX files.
+Calls Pandoc to convert Markup files.
 
 Parameters:
-- *type*:  Type to document convert to, supports 'html', 'pdf' or 'odt'.
+- *type*:  Type to document convert to, supports `'docx'`, `'html'`, `'odt'` or `'pdf'`.
 
 <a id="export_ext.pdf_defaults"></a>
 ## `export_ext.pdf_defaults`
