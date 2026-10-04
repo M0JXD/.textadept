@@ -33,10 +33,7 @@ format.commands.typst = 'typstyle -l 120 -t 4 --wrap-text=sentence'
 local lsp = false
 if OS ~= 'bsd' then
 	lsp = require('lsp')
-	if UI == 'qt' then
-		lsp.server_commands.dart = 'dart language-server'
-		keys['ctrl+.'] = textadept.menu.menubar['Tools/Language Server/Code Action'][2]
-	end
+	keys['ctrl+.'] = textadept.menu.menubar['Tools/Language Server/Code Action'][2]
 end
 -- require('lua_repl')
 keys[(UI == 'terminal' and 'meta+O' or 'alt+O')] = require('open_file_mode')
@@ -91,9 +88,6 @@ local function lexer_settings()
 	local name = buffer:get_lexer()
 	if name == 'makefile' or name == 'lua' then
 		buffer.use_tabs = true
-	elseif name == 'dart' then
-		buffer.tab_width = 2
-		if format then format.on_save = true end
 	elseif name == 'text' or name == 'markdown' or name == 'typst' then
 		if buffer.length < 100000 then view.wrap_mode = view.WRAP_WHITESPACE end
 		if name ~= 'typst' then textadept.editing.strip_trailing_spaces = false end
