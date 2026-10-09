@@ -65,7 +65,12 @@ lexer.detect_extensions.njk = 'html'
 lexer.detect_extensions.typ = 'typst'
 lexer.detect_extensions.typst = 'typst'
 textadept.editing.auto_pairs.text = {}
-textadept.editing.auto_pairs.markdown = {['*'] = '*', ['_'] = '_'}
+textadept.editing.auto_pairs.markdown = {
+	['*'] = '*', ['_'] = '_', ['<'] = '>', ['('] = ')', ['['] = ']'
+}
+textadept.editing.auto_pairs.typst = {
+	['*'] = '*', ['_'] = '_', ['<'] = '>', ['('] = ')', ['['] = ']'
+}
 events.connect(events.LEXER_LOADED, function(name)
 	local prop = 'scintillua.comment.' .. name
 	buffer.property[prop] = buffer.property[prop] .. ' ' -- extra trailing space
@@ -99,12 +104,16 @@ events.connect(events.LEXER_LOADED, lexer_settings)
 events.connect(events.BUFFER_AFTER_SWITCH, lexer_settings)
 events.connect(events.VIEW_AFTER_SWITCH, lexer_settings)
 
--- Tools
+-- Build/Run
 textadept.run.build_commands['CMakeLists.txt'] = 'cmake --build build'
 textadept.run.build_commands['xmake.lua'] = 'xmake'
 textadept.run.compile_commands.python = (OS == 'windows' and 'py' or 'python') .. ' -m flake8 %f' -- Run a linter
+
+-- TODO: An Arduino (or Embedded?) module that detects serial ports and provides a choice of boards
 textadept.run.compile_commands.ino = 'arduino-cli compile -b arduino:avr:nano "%p"' -- Verify
 textadept.run.run_commands.ino = 'arduino-cli upload "%p" -b arduino:avr:nano -p /dev/ttyACM0' -- Upload
+
+-- Markup Languages
 local open = OS == 'windows' and 'start ""' or OS == 'macos' and 'open' or 'xdg-open'
 textadept.run.compile_commands.markdown = 'markdown -o "%e.html" "%f"'
 textadept.run.run_commands.markdown = open .. ' "%e.html"'
