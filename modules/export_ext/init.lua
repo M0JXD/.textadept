@@ -128,10 +128,12 @@ function M.pandoc(type)
 			pandoc_str = pandoc_str .. '--pdf-engine=' .. M.pdf_engine .. ' --defaults ' ..
 				M.pdf_defaults
 		end
-		pandoc_str = pandoc_str .. ' --standalone=true --output="' .. out_filename .. '" "' .. filename .. '"'
+		pandoc_str = pandoc_str .. ' --standalone --output="' .. out_filename .. '" "' .. filename .. '"'
 		os.remove('"' .. out_filename .. '"')
 		if os.execute(pandoc_str) then
 			os.execute(string.format('%s "%s"', M.browser, out_filename))
+		else
+			ui.statusbar_text = 'Failed to convert!'
 		end
 	end
 end
