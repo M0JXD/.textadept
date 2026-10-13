@@ -128,17 +128,17 @@ function M.pandoc(type)
 			pandoc_str = pandoc_str .. '--pdf-engine=' .. M.pdf_engine .. ' --defaults ' ..
 				M.pdf_defaults
 		end
-		pandoc_str = pandoc_str .. ' -s -o "' .. out_filename .. '" "' .. filename .. '"'
+		pandoc_str = pandoc_str .. ' --standalone=true --output="' .. out_filename .. '" "' .. filename .. '"'
 		os.remove('"' .. out_filename .. '"')
-		os.execute(pandoc_str)
-		os.execute(string.format('%s "%s"', M.browser, out_filename))
-
+		if os.execute(pandoc_str) then
+			os.execute(string.format('%s "%s"', M.browser, out_filename))
+		end
 	end
 end
 
 -- Check Export exists and add if not.
-_L['Export'] = 'E_xport'
-if not textadept.menu.menubar['File/Export'] then
+if not textadept.menu.menubar['File/Export/'] then
+	_L['Export'] = 'E_xport'
 	local m_file = textadept.menu.menubar['File']
 	table.insert(m_file, #m_file - 1, {''}) -- separator
 	table.insert(m_file, #m_file - 1, {title = _L['Export']})
