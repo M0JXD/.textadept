@@ -29,6 +29,13 @@ lex:add_rule('link', lex:tag(lexer.LINK, link_url))
 local escapes = S'*_;#<>$@`'
 lex:add_rule('escapes', P'\\' * escapes)
 
+-- Labels
+lex:add_rule('label',
+	lex:tag(lexer.LABEL, lexer.range('<', '>', true, false, true) - (P'<=' + P'< ')))
+
+-- Math
+lex:add_rule('math', lex:tag(lexer.NUMBER, lexer.range('$')))
+
 -- Raw Text
 local raw_text = lpeg.Cmt(lpeg.C(P('`')^1), function(input, index, bt)
 	-- `foo`, ``foo``, ``foo`bar``, `foo``bar` are all allowed.
@@ -37,15 +44,15 @@ local raw_text = lpeg.Cmt(lpeg.C(P('`')^1), function(input, index, bt)
 end)
 lex:add_rule('raw', lex:tag(lexer.CODE, raw_text))
 
--- References
-local variable = lex:tag(lexer.VARIABLE, lexer.word_utf8 * (S'-.:'^-1 * lexer.word_utf8)^0)
-lex:add_rule('reference', lex:tag(lexer.REFERENCE, '@' * variable))
-
 -- Strong and Emphasis
--- Don't capture use as multiply or in import statements.
+-- Don't capture use as code mode multiply or import statements.
 lex:add_rule('strong', lex:tag(lexer.BOLD, lexer.range('*') - (P'* ' + (B(P': ') * P'*\n'))))
--- Don't capture underscores used in code mode variable names.
+-- Don't capture underscores used in code mode identifiers.
 lex:add_rule('em', lex:tag(lexer.ITALIC, lexer.range('_') - ((B('let ') * '_') + ('_' * (S' ,')))))
+
+-- References
+local identifier = lexer.word_utf8 * (S'-.:'^-1 * lexer.word_utf8)^0
+lex:add_rule('reference', lex:tag(lexer.REFERENCE, '@' * identifier))
 
 -- Code Expressions
 -- Using rules from: https://typst.app/docs/reference/syntax/#code
@@ -53,26 +60,26 @@ lex:add_rule('code_mode', lex:tag(lexer.EMBEDDED, P'#' - B('\\') * P'#'))
 lex:add_rule('keyword', lex:tag(lexer.KEYWORD, B'#' * lex:word_match(lexer.KEYWORD)))
 
 local operators = S'-+*/=!<>' + P'not' + P'in' + P'and' + P'or'
-local func = variable * #S'(['
+local func = identifier * #S'(['
 lex:add_rule('function', lex:tag(lexer.FUNCTION, func))
 
 -- Match some more code mode aspects if they seem like they are situationally in a expression
 local ws = lexer.space^1
-local assignable = P'"'^-1 * (variable + lexer.number) * P'"'^-1
+local assignable = P'"'^-1 * (identifier + lexer.number) * P'"'^-1
 
 lex:add_rule('let_bind', lex:tag(lexer.KEYWORD,
-	P'let' * #(ws * ((variable * ws * P'=') + ('(' * variable * ',')))))
+	P'let' * #(ws * ((identifier * ws * P'=') + ('(' * identifier * ',')))))
 
 lex:add_rule('else_if',
 	lex:tag(lexer.KEYWORD, (P'else' * ws * P'if'^-1) - (-B(S']}' * ' ') * P'else')))
 
 lex:add_rule('if', lex:tag(lexer.KEYWORD, P'if' *
 	#(ws *
-		((((assignable + operators^-2) * ws)^0 * S'[{') + func + ('(' * variable * ws * operators)))))
+		((((assignable + operators^-2) * ws)^0 * S'[{') + func + ('(' * identifier * ws * operators)))))
 
 lex:add_rule('set', lex:tag(lexer.KEYWORD, P'set' * #(ws * func)))
 
-lex:add_rule('show', lex:tag(lexer.KEYWORD, P'show' * #(ws * (func + (variable * P': ')))))
+lex:add_rule('show', lex:tag(lexer.KEYWORD, P'show' * #(ws * (func + (identifier * P': ')))))
 
 lex:add_rule('for', lex:tag(lexer.KEYWORD, P'for' * #(ws *
 	((assignable * ws * P'in' * ws * assignable * ws * S'[{') + (lexer.range('(', ')') * ws * P'in')))))
@@ -82,7 +89,7 @@ lex:add_rule('in', lex:tag(lexer.KEYWORD, P'in' * #(ws * ((assignable * ws * S'[
 lex:add_rule('while',
 	lex:tag(lexer.KEYWORD, P'while' * #(ws * ((assignable + operators^2) * ws)^0 * S'[{')))
 
-lex:add_rule('variable', lex:tag(lexer.VARIABLE, B'#' * variable))
+lex:add_rule('variable', lex:tag(lexer.VARIABLE, B'#' * identifier))
 
 lex:add_rule('string', lex:tag(lexer.STRING, lexer.range('"') * #((S'\n:,)') + (ws * S'[{'))))
 
@@ -94,13 +101,6 @@ lex:add_rule('numeric', lex:tag(lexer.NUMBER,
 		lexer.number
 	-- Don't match comma delimited numbers, e.g. "4,200+"
 	- (lexer.number * ',' * lexer.number)))
-
--- Labels
-lex:add_rule('label',
-	lex:tag(lexer.LABEL, lexer.range('<', '>', true, false, true) - (P'<=' + P'< ')))
-
--- Math
-lex:add_rule('math', lex:tag(lexer.NUMBER, lexer.range('$')))
 
 -- Plain text.
 lex:add_rule('word', lex:tag(lexer.DEFAULT, lexer.word_utf8))
