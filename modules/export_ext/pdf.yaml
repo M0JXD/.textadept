@@ -6,4 +6,6 @@ variables:
     top: 1.4cm
     # x: 0cm
     # y: 0cm
-  mainfont: Arial
+  mainfont: default
+  # mainfont: Arial
+  # mainfont: Carlito
