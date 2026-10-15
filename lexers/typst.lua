@@ -56,7 +56,7 @@ lex:add_rule('reference', lex:tag(lexer.REFERENCE, '@' * identifier))
 
 -- Code Expressions
 -- Using rules from: https://typst.app/docs/reference/syntax/#code
-lex:add_rule('code_mode', lex:tag(lexer.EMBEDDED, P'#' - B('\\') * P'#'))
+lex:add_rule('code_mode', lex:tag(lexer.EMBEDDED, P'#'))
 lex:add_rule('keyword', lex:tag(lexer.KEYWORD, B'#' * lex:word_match(lexer.KEYWORD)))
 
 local operators = S'-+*/=!<>' + P'not' + P'in' + P'and' + P'or'
