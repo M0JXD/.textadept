@@ -7,12 +7,9 @@ local P, S, B = lpeg.P, lpeg.S, lpeg.B
 
 local lex = lexer.new(...)
 
--- Escaped characters (capture them before other rules)
-local escapes = S'*_;#<>$'
-lex:add_rule('escapes', P'\\' * escapes)
-
 -- Comments
 -- Don't try to capture URLs as comments
+-- Bare URL's are captured: https://typst.app/docs/reference/model/link/
 local line_comment = -B(S'ps' * ':') * lexer.to_eol('//', true)
 local block_comment = lexer.range('/*', '*/')
 lex:add_rule('comment', lex:tag(lexer.COMMENT, line_comment + block_comment))
@@ -22,6 +19,15 @@ lex:add_rule('header', lex:tag(lexer.HEADING, lexer.to_eol(lexer.starts_line('='
 
 -- Lists
 lex:add_rule('list', lex:tag(lexer.LIST, lexer.starts_line(S('+-'), true) * S(' \t')))
+
+-- Links
+local link_url = -B(P'"') * 'http' * P('s')^-1 * '://' * (lexer.any - lexer.space)^1 +
+	('<' * lexer.alpha^2 * ':' * (lexer.any - lexer.space - '>')^1 * '>')
+lex:add_rule('link', lex:tag(lexer.LINK, link_url))
+
+-- Escaped characters (capture them before other rules)
+local escapes = S'*_;#<>$@`'
+lex:add_rule('escapes', P'\\' * escapes)
 
 -- Raw Text
 local raw_text = lpeg.Cmt(lpeg.C(P('`')^1), function(input, index, bt)
@@ -36,7 +42,9 @@ local variable = lex:tag(lexer.VARIABLE, lexer.word_utf8 * (S'-.:'^-1 * lexer.wo
 lex:add_rule('reference', lex:tag(lexer.REFERENCE, '@' * variable))
 
 -- Strong and Emphasis
+-- Don't capture use as multiply or in import statements.
 lex:add_rule('strong', lex:tag(lexer.BOLD, lexer.range('*') - (P'* ' + (B(P': ') * P'*\n'))))
+-- Don't capture underscores used in code mode variable names.
 lex:add_rule('em', lex:tag(lexer.ITALIC, lexer.range('_') - ((B('let ') * '_') + ('_' * (S' ,')))))
 
 -- Code Expressions
@@ -80,7 +88,7 @@ lex:add_rule('string', lex:tag(lexer.STRING, lexer.range('"') * #((S'\n:,)') + (
 
 lex:add_rule('values', lex:tag(lexer.NUMBER, lexer.number * lex:word_match('units')))
 
--- Lex as a number if after a keyword, assignment or being passed into a function
+-- Lex as a number if after a keyword, assignment or being passed into a function.
 lex:add_rule('numeric', lex:tag(lexer.NUMBER,
 	((B(P'if ') + B(P'while ') + B(P'for ') + B(P'in ')) + (B(S'-–+*/=!<>{(,: ' * ' ') + B('('))) *
 		lexer.number
@@ -93,11 +101,6 @@ lex:add_rule('label',
 
 -- Math
 lex:add_rule('math', lex:tag(lexer.NUMBER, lexer.range('$')))
-
--- Links
-local link_url = -B(P'"') * 'http' * P('s')^-1 * '://' * (lexer.any - lexer.space)^1 +
-	('<' * lexer.alpha^2 * ':' * (lexer.any - lexer.space - '>')^1 * '>')
-lex:add_rule('link', lex:tag(lexer.LINK, link_url))
 
 -- Plain text.
 lex:add_rule('word', lex:tag(lexer.DEFAULT, lexer.word_utf8))
