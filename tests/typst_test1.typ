@@ -122,3 +122,7 @@ My new lexer can sometimes incorrectly highlight keywords and numbers, e.g.:
 + For those unaware, in 2005 Dr Who returned to the BBC.
 + I know who you are Batman, 12 hours until Protocol 10 commences.
 + I have assembled and fully (really) completed this job.
+
+While it's uncommon, a user might break up their sentence over multiple lines
+for improved readability. If a keyword is the first it will highlight.
+Most users write one sentence or paragraph per line and utilise word wrap like Typsts example's do.
