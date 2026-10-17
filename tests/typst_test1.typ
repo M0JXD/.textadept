@@ -34,7 +34,7 @@ def func()
 == Second Level Heading
 In Typst, a link is like so: https://typst.app/
 
-Typst has *strong* and _emphasis_. else if it does not (more keyword checks).
+Typst has *strong* and _emphasis_.
 A paragraph may use #variable to access a code mode variable in a sentence.
 
 Lists can start with + or - depending on if they're numbered or bulleted:
@@ -103,6 +103,8 @@ $ pi F_n = round(1 / sqrt(5) phi.alt^n), quad phi.alt = (1 + sqrt(5)) / 2 $
 
 ==== Random Heading
 
+else if it does not (more keyword checks).
+
 #align(center, table(
     columns: count,
     ..nums.map(n => $F_#n$),
@@ -115,8 +117,8 @@ $ pi F_n = round(1 / sqrt(5) phi.alt^n), quad phi.alt = (1 + sqrt(5)) / 2 $
     *Glaciers form an important part of the earth's climate system.*
 ]
 
-My new lexer can sometimes incorrectly highlight keywords and numbers, e.g.
+My new lexer can sometimes incorrectly highlight keywords and numbers, e.g.:
 
-For those unaware, in 2005 Dr Who returned to the BBC.
-I know who you are Batman, 12 hours until Protocol 10 commences.
-
++ For those unaware, in 2005 Dr Who returned to the BBC.
++ I know who you are Batman, 12 hours until Protocol 10 commences.
++ I have assembled and fully (really) completed this job.
