@@ -1,6 +1,9 @@
 -- Copyright 2006-2026 Mitchell. See LICENSE.
 -- Markdown LPeg lexer.
 
+-- This lexer adds highlighting for `$ - $` ranges.
+-- Because I'm using https://duskmoon314.github.io/mdbook-typst-math/ for a project.
+
 local lexer = lexer
 local P, S, B = lpeg.P, lpeg.S, lpeg.B
 
