@@ -117,6 +117,6 @@ $ pi F_n = round(1 / sqrt(5) phi.alt^n), quad phi.alt = (1 + sqrt(5)) / 2 $
 
 My new lexer can sometimes incorrectly highlight keywords and numbers, e.g.
 
-The protagonist (for whom in their [or so they thought] dream) discovered their true purpose.
+For those unaware, in 2005 Dr Who returned to the BBC.
 I know who you are Batman, 12 hours until Protocol 10 commences.
 
