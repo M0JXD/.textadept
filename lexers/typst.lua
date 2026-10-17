@@ -128,7 +128,7 @@ end
 -- Keywords
 lex:set_word_list(lexer.KEYWORD, {
 	'let', 'set', 'show', 'while', 'for', 'if', 'include', 'import', 'return', 'else', 'in', 'not',
-	'and', 'or'
+	'and', 'or', 'context'
 })
 
 -- Named values
