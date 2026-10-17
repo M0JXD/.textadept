@@ -117,6 +117,8 @@ else if it does not (more keyword checks).
     *Glaciers form an important part of the earth's climate system.*
 ]
 
+= A look at limitations
+
 My new lexer can sometimes incorrectly highlight keywords and numbers, e.g.:
 
 + For those unaware, in 2005 Dr Who returned to the BBC.
@@ -126,3 +128,6 @@ My new lexer can sometimes incorrectly highlight keywords and numbers, e.g.:
 While it's uncommon, a user might break up their sentence over multiple lines
 for improved readability. If a keyword is the first it will highlight.
 Most users write one sentence or paragraph per line and utilise word wrap like Typsts example's do.
+
+// If a type is actually the named parameter, it will highlight
+#my_func(bottom: 10mm)
