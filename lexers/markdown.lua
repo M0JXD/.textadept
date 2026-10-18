@@ -122,7 +122,7 @@ local underscore_em = (B(punct_space) + #lexer.starts_line('_')) * flanked_range
 lex:add_rule('em', lex:tag(lexer.ITALIC, asterisk_em + underscore_em))
 
 -- Mathematics
-lex:add_rule('maths', lex:tag(lexer.NUMBER, lexer.range('$')))
+lex:add_rule('maths', lex:tag(lexer.NUMBER, lexer.range('$$') + lexer.range('$')))
 
 -- Plain text.
 lex:add_rule('word', lex:tag(lexer.DEFAULT, lexer.word_utf8))
