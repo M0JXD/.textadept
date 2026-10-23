@@ -1,4 +1,16 @@
-// Testing Typst document
+let _ = foo
+
+#import foo: *
+*bar*
+
+Not in bold
+// Comment
+
+Label test: @foo-bar, after the label.
+
+let _asdf_ = asdffoo
+
+Intended italics: _asdf_
 
 // Set rules and variable usage:
 #set page(width: 10cm, height: auto)
@@ -54,6 +66,8 @@ Example inline mathematics look like $F_n = F_n(n-1) + pi + F_(n-2)$.
 Mathematics that are not inline occur like so:
 
 $ pi F_n = round(1 / sqrt(5) phi.alt^n), quad phi.alt = (1 + sqrt(5)) / 2 $
+
+<another label>
 
 == Code Mode
 
