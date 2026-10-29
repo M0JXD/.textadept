@@ -29,7 +29,7 @@ M.bindings = {
 --- Terminal emulator to open.
 -- The module attempts to detect what is correct for your OS/Desktop.
 -- @usage quick_open.terminal = 'cool-retro-term'
-M.terminal = OS == 'windows' and 'cmd.exe /f:on' or 'xterm -hold'
+M.terminal = OS == 'windows' and 'cmd.exe' or 'xterm -hold'
 
 --- Argument to maximise the terminal emulator.
 -- The module attempts to detect what is correct for your OS/Desktop.

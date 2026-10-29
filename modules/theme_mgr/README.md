@@ -18,7 +18,6 @@ terminal is capable to otherwise fallback to the default theme.
 If using the GTK2 build, it attempts to detect if the system GTK theme is a dark one so it can
 apply your chosen dark theme. There is no mode changed support for GTK2
 (I don't think any GTK2 DEs had such capability anyway).
-NB: The check relies on `textadept-gtk` being in your `PATH`.
 
 I've added [@kbarni's theme selector][2] too just for fun!
 

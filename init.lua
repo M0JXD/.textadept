@@ -6,7 +6,7 @@ theme_mgr.theme.light = 'ayu-light'
 theme_mgr.theme.dark = 'ayu-dark'
 theme_mgr.theme.term = 'ayu-evolve'
 theme_mgr.theme.markdown = {'catppuccin-latte', 'ayu-dark'}
-if OS ~= 'windows' then theme_mgr.theme.text = {'xed-light', 'xed-dark'} end
+theme_mgr.theme.typ = {'catppuccin-latte', 'ayu-dark'}
 -- theme_mgr.font.family = 'FreeMono'
 
 -- Modules (Official)
@@ -29,13 +29,10 @@ format.commands.typescript = prettier_formatter
 format.commands.markdown = prettier_formatter
 format.commands.yaml = prettier_formatter
 format.commands.python = OS == 'windows' and 'py' or 'python' .. ' -m black -'
+format.commands.typst = 'typstyle -t 4 --wrap-text=sentence'
 local lsp = false
 if OS ~= 'bsd' then
 	lsp = require('lsp')
-	if UI == 'qt' then
-		lsp.server_commands.dart = 'dart language-server'
-		keys['ctrl+.'] = textadept.menu.menubar['Tools/Language Server/Code Action'][2]
-	end
 end
 -- require('lua_repl')
 keys[(UI == 'terminal' and 'meta+O' or 'alt+O')] = require('open_file_mode')
@@ -62,10 +59,19 @@ lexer.detect_extensions.adoc = 'asciidoc'
 lexer.detect_extensions.blp = 'blueprint'
 lexer.detect_extensions.C = 'cpp'
 lexer.detect_extensions['direwolf.conf'] = 'bash'
+lexer.detect_extensions.dts = 'c'
+lexer.detect_extensions.dtso = 'c'
 lexer.detect_extensions.h = 'c'
 lexer.detect_extensions.njk = 'html'
+lexer.detect_extensions.typ = 'typst'
+lexer.detect_extensions.typst = 'typst'
 textadept.editing.auto_pairs.text = {}
-textadept.editing.auto_pairs.markdown = {['*'] = '*', ['_'] = '_'}
+textadept.editing.auto_pairs.markdown = {
+	['*'] = '*', ['_'] = '_', ['<'] = '>', ['('] = ')', ['['] = ']'
+}
+textadept.editing.auto_pairs.typst = {
+	['*'] = '*', ['_'] = '_', ['<'] = '>', ['('] = ')', ['['] = ']'
+}
 events.connect(events.LEXER_LOADED, function(name)
 	local prop = 'scintillua.comment.' .. name
 	buffer.property[prop] = buffer.property[prop] .. ' ' -- extra trailing space
@@ -75,6 +81,7 @@ textadept.editing.highlight_words = textadept.editing.HIGHLIGHT_SELECTED
 textadept.run.run_in_background = true
 ui.find.highlight_all_matches = true
 view.edge_column = 100
+view.wrap_indent_mode = view.WRAPINDENT_SAME
 local function lexer_settings()
 	buffer.tab_width = 4
 	buffer.use_tabs = false
@@ -87,12 +94,9 @@ local function lexer_settings()
 	local name = buffer:get_lexer()
 	if name == 'makefile' or name == 'lua' then
 		buffer.use_tabs = true
-	elseif name == 'dart' then
-		buffer.tab_width = 2
-		if format then format.on_save = true end
-	elseif name == 'text' or name == 'markdown' then
-		view.wrap_mode = view.WRAP_WHITESPACE
-		textadept.editing.strip_trailing_spaces = false
+	elseif name == 'text' or name == 'markdown' or name == 'typst' then
+		if buffer.length < 100000 then view.wrap_mode = view.WRAP_WHITESPACE end
+		if name ~= 'typst' then textadept.editing.strip_trailing_spaces = false end
 		doc_stats.display.chars = 3
 		doc_stats.display.words = 3
 	end
@@ -101,16 +105,27 @@ events.connect(events.LEXER_LOADED, lexer_settings)
 events.connect(events.BUFFER_AFTER_SWITCH, lexer_settings)
 events.connect(events.VIEW_AFTER_SWITCH, lexer_settings)
 
--- Tools
+-- Build/Run
 textadept.run.build_commands['CMakeLists.txt'] = 'cmake --build build'
 textadept.run.build_commands['xmake.lua'] = 'xmake'
 textadept.run.compile_commands.python = (OS == 'windows' and 'py' or 'python') .. ' -m flake8 %f' -- Run a linter
+
+-- TODO: An Arduino (or Embedded?) module that detects serial ports and provides a choice of boards
 textadept.run.compile_commands.ino = 'arduino-cli compile -b arduino:avr:nano "%p"' -- Verify
 textadept.run.run_commands.ino = 'arduino-cli upload "%p" -b arduino:avr:nano -p /dev/ttyACM0' -- Upload
 
+-- Markup Languages
+local open = OS == 'windows' and 'start ""' or OS == 'macos' and 'open' or 'xdg-open'
+textadept.run.compile_commands.markdown = 'markdown -o "%e.html" "%f"'
+textadept.run.run_commands.markdown = open .. ' "%e.html"'
+textadept.run.compile_commands.typ = 'typst c "%f"'
+textadept.run.run_commands.typ = open .. ' "%e.pdf"'
+
 -- Extra Utilities
+local menubar = textadept.menu.menubar
+
 _L['Rename'] = '_Rename'
-table.insert(textadept.menu.menubar[_L['File']], 8, {
+table.insert(menubar[_L['File']], 8, {
 	_L['Rename'], function()
 		local oldname = buffer.filename
 		buffer:save_as()
@@ -120,7 +135,7 @@ table.insert(textadept.menu.menubar[_L['File']], 8, {
 
 -- Pandoc conversions to Markdown often have extra blank lines
 _L['Delete Blank Lines'] = 'Delete Blank _Lines'
-table.insert(textadept.menu.menubar[_L['Edit']], 11, {
+table.insert(menubar[_L['Edit']], 11, {
 	_L['Delete Blank Lines'], function()
 		local i = 1
 		while i < buffer.line_count do
@@ -136,19 +151,19 @@ table.insert(textadept.menu.menubar[_L['Edit']], 11, {
 })
 
 _L['Reset Lua State'] = 'Reset L_ua State'
-local tools_menu = textadept.menu.menubar[_L['Tools']]
+local tools_menu = menubar[_L['Tools']]
 tools_menu[#tools_menu + 1] = {''}
 tools_menu[#tools_menu + 1] = {_L['Reset Lua State'], reset}
 
 _L['Toggle Line Guide'] = 'Toggle _Line Guide'
-table.insert(textadept.menu.menubar[_L['View']], 18, {
+table.insert(menubar[_L['View']], 18, {
 	_L['Toggle Line Guide'], function()
 		view.edge_mode = view.edge_mode == view.EDGE_LINE and view.EDGE_NONE or view.EDGE_LINE
 	end
 })
 
 _L['Toggle Strip Trailing Whitespace'] = 'Toggle Strip _Trailing Whitespace'
-table.insert(textadept.menu.menubar[_L['View']], 19, {
+table.insert(menubar[_L['View']], 19, {
 	_L['Toggle Strip Trailing Whitespace'], function()
 		textadept.editing.strip_trailing_spaces = not textadept.editing.strip_trailing_spaces
 		events.emit(events.UPDATE_UI, 3)
@@ -156,13 +171,13 @@ table.insert(textadept.menu.menubar[_L['View']], 19, {
 })
 
 _L['Toggle End Of Line Characters'] = 'Toggle _End Of Line Characters'
-table.insert(textadept.menu.menubar[_L['View']], 20, {
+table.insert(menubar[_L['View']], 20, {
 	_L['Toggle End Of Line Characters'], function() view.view_eol = not view.view_eol end
 })
 
 _L['Flip a Coin'] = 'Flip a _Coin'
 math.randomseed(os.time())
-table.insert(textadept.menu.menubar[_L['Help']], #textadept.menu.menubar - 2, {
+table.insert(menubar[_L['Help']], #menubar - 2, {
 	_L['Flip a Coin'], function()
 		local flip = math.random(2) > 1 and true or false
 		ui.dialogs.message{
@@ -181,12 +196,13 @@ events.connect(events.UPDATE_UI, function(updated)
 end)
 
 -- Keybindings
-local menubar = textadept.menu.menubar
 keys['f2'] = menubar['File/Rename'][2]
 keys['f5'] = reset
+keys['f7'] = function() buffer:set_lexer(buffer:get_lexer()) end
 if UI == 'terminal' then
 	keys['meta+L'] = textadept.editing.select_line
 	keys['ctrl+ '] = menubar['Edit/Complete Word'][2]
+	keys['meta+s'] = ui.suspend
 end
 keys[(UI == 'terminal' and 'ctrl+k' or 'ctrl+K')] = buffer.line_delete
 keys[(UI == 'terminal' and 'meta+,' or 'ctrl+,')] = menubar['Edit/Preferences'][2]
@@ -214,7 +230,7 @@ events.connect(events.BUFFER_DELETED, save_session)
 -- Platform Specific Adjustments
 if UI == 'terminal' then
 	-- Add a suspend menu entry
-	table.insert(textadept.menu.menubar[_L['View']], {'Suspend...', ui.suspend})
+	table.insert(menubar[_L['View']], {'Suspend...', ui.suspend})
 elseif OS == 'windows' then
 	keys['ctrl+alt+|'] = nil -- Disable due to weird UK keyboard
 elseif UI == 'gtk' then
