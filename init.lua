@@ -33,7 +33,6 @@ format.commands.typst = 'typstyle -t 4 --wrap-text=sentence'
 local lsp = false
 if OS ~= 'bsd' then
 	lsp = require('lsp')
-	keys['ctrl+.'] = textadept.menu.menubar['Tools/Language Server/Code Action'][2]
 end
 -- require('lua_repl')
 keys[(UI == 'terminal' and 'meta+O' or 'alt+O')] = require('open_file_mode')
@@ -123,8 +122,10 @@ textadept.run.compile_commands.typ = 'typst c "%f"'
 textadept.run.run_commands.typ = open .. ' "%e.pdf"'
 
 -- Extra Utilities
+local menubar = textadept.menu.menubar
+
 _L['Rename'] = '_Rename'
-table.insert(textadept.menu.menubar[_L['File']], 8, {
+table.insert(menubar[_L['File']], 8, {
 	_L['Rename'], function()
 		local oldname = buffer.filename
 		buffer:save_as()
@@ -134,7 +135,7 @@ table.insert(textadept.menu.menubar[_L['File']], 8, {
 
 -- Pandoc conversions to Markdown often have extra blank lines
 _L['Delete Blank Lines'] = 'Delete Blank _Lines'
-table.insert(textadept.menu.menubar[_L['Edit']], 11, {
+table.insert(menubar[_L['Edit']], 11, {
 	_L['Delete Blank Lines'], function()
 		local i = 1
 		while i < buffer.line_count do
@@ -150,19 +151,19 @@ table.insert(textadept.menu.menubar[_L['Edit']], 11, {
 })
 
 _L['Reset Lua State'] = 'Reset L_ua State'
-local tools_menu = textadept.menu.menubar[_L['Tools']]
+local tools_menu = menubar[_L['Tools']]
 tools_menu[#tools_menu + 1] = {''}
 tools_menu[#tools_menu + 1] = {_L['Reset Lua State'], reset}
 
 _L['Toggle Line Guide'] = 'Toggle _Line Guide'
-table.insert(textadept.menu.menubar[_L['View']], 18, {
+table.insert(menubar[_L['View']], 18, {
 	_L['Toggle Line Guide'], function()
 		view.edge_mode = view.edge_mode == view.EDGE_LINE and view.EDGE_NONE or view.EDGE_LINE
 	end
 })
 
 _L['Toggle Strip Trailing Whitespace'] = 'Toggle Strip _Trailing Whitespace'
-table.insert(textadept.menu.menubar[_L['View']], 19, {
+table.insert(menubar[_L['View']], 19, {
 	_L['Toggle Strip Trailing Whitespace'], function()
 		textadept.editing.strip_trailing_spaces = not textadept.editing.strip_trailing_spaces
 		events.emit(events.UPDATE_UI, 3)
@@ -170,13 +171,13 @@ table.insert(textadept.menu.menubar[_L['View']], 19, {
 })
 
 _L['Toggle End Of Line Characters'] = 'Toggle _End Of Line Characters'
-table.insert(textadept.menu.menubar[_L['View']], 20, {
+table.insert(menubar[_L['View']], 20, {
 	_L['Toggle End Of Line Characters'], function() view.view_eol = not view.view_eol end
 })
 
 _L['Flip a Coin'] = 'Flip a _Coin'
 math.randomseed(os.time())
-table.insert(textadept.menu.menubar[_L['Help']], #textadept.menu.menubar - 2, {
+table.insert(menubar[_L['Help']], #menubar - 2, {
 	_L['Flip a Coin'], function()
 		local flip = math.random(2) > 1 and true or false
 		ui.dialogs.message{
@@ -195,7 +196,6 @@ events.connect(events.UPDATE_UI, function(updated)
 end)
 
 -- Keybindings
-local menubar = textadept.menu.menubar
 keys['f2'] = menubar['File/Rename'][2]
 keys['f5'] = reset
 keys['f7'] = function() buffer:set_lexer(buffer:get_lexer()) end
@@ -230,7 +230,7 @@ events.connect(events.BUFFER_DELETED, save_session)
 -- Platform Specific Adjustments
 if UI == 'terminal' then
 	-- Add a suspend menu entry
-	table.insert(textadept.menu.menubar[_L['View']], {'Suspend...', ui.suspend})
+	table.insert(menubar[_L['View']], {'Suspend...', ui.suspend})
 elseif OS == 'windows' then
 	keys['ctrl+alt+|'] = nil -- Disable due to weird UK keyboard
 elseif UI == 'gtk' then
