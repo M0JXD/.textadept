@@ -88,7 +88,7 @@ styles.command_section = styles[lexer.HEADING]
 styles.environment = styles[lexer.TYPE]
 styles.environment_math = styles[lexer.NUMBER]
 -- Makefile.
--- styles.target = {}
+styles.target = {fore = colors.yellow}
 -- Markdown.
 styles.hr = {fore = colors.dark_grey, bold = true}
 -- Output.
