@@ -50,10 +50,10 @@ require('export_ext')
 local doc_stats = require('doc_stats')
 doc_stats.display.lines = true
 local discord_rpc = false
-if OS ~= 'bsd' and UI ~= 'terminal' then
+if OS ~= 'bsd' then
 	discord_rpc = require('discord_rpc')
 	discord_rpc.show_connected = false
-	discord_rpc()
+	if UI ~= 'terminal' then discord_rpc() end
 end
 
 -- Modules (External)
