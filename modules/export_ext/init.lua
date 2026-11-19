@@ -121,7 +121,7 @@ function M.pandoc(type)
 		if type == 'docx' then
 			pandoc_str = pandoc_str
 		elseif type == 'html' then
-			pandoc_str = pandoc_str .. '--standalone --embed-resources=true --css=' .. M.css
+			pandoc_str = pandoc_str .. '--standalone --embed-resources --css=' .. M.css
 		elseif type == 'odt' then
 			pandoc_str = pandoc_str .. '--reference-doc ' .. M.odt_reference
 		elseif type == 'pdf' then
