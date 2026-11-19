@@ -38,6 +38,7 @@ end
 keys[(UI == 'terminal' and 'meta+O' or 'alt+O')] = require('open_file_mode')
 -- require('scratch')
 local spellcheck = require('spellcheck')
+if UI ~= 'terminal' then view.indic_stroke_width[spellcheck.INDIC_SPELLING] = 300 end
 spellcheck.check_spelling_on_save = false
 local update_notifier = require('update_notifier')
 update_notifier.check_on_startup = true
